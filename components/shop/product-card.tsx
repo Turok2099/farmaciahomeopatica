@@ -11,10 +11,20 @@ export function ProductCard({ product }: ProductCardProps) {
     return (
         <div className="group relative overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card)] shadow-sm transition-all hover:shadow-md">
             <div className="aspect-square w-full overflow-hidden bg-[var(--muted)] relative">
-                {/* Placeholder for real image */}
-                <div className="absolute inset-0 flex items-center justify-center text-[var(--muted-foreground)] selection:bg-none">
-                    {product.name.substring(0, 2)}
-                </div>
+                {product.image ? (
+                    <div className="relative w-full h-full">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                            src={product.image}
+                            alt={product.name}
+                            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
+                        />
+                    </div>
+                ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-[var(--muted-foreground)] selection:bg-none">
+                        {product.name.substring(0, 2)}
+                    </div>
+                )}
             </div>
             <div className="p-4">
                 <div className="mb-2 text-xs font-medium text-[var(--muted-foreground)]">

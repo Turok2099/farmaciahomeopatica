@@ -41,8 +41,19 @@ export default async function ProductPage(
 
             <div className="grid md:grid-cols-2 gap-10">
                 {/* Product Image Placeholder */}
-                <div className="aspect-square bg-[var(--muted)] rounded-xl flex items-center justify-center text-[var(--muted-foreground)] text-4xl font-bold border border-[var(--border)]">
-                    {product.name.charAt(0)}
+                <div className="aspect-square bg-[var(--muted)] rounded-xl overflow-hidden border border-[var(--border)] relative">
+                    {product.image ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        <div className="flex items-center justify-center h-full text-[var(--muted-foreground)] text-4xl font-bold">
+                            {product.name.charAt(0)}
+                        </div>
+                    )}
                 </div>
 
                 {/* Product Details */}
