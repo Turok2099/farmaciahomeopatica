@@ -1,51 +1,51 @@
 import Link from "next/link"
-import { Product } from "@/lib/data"
-import { Button } from "@/components/ui/button"
-import { ShoppingCart } from "lucide-react"
+import type { Product } from "@/lib/products"
+import { AddToCartButton } from "@/components/cart/add-to-cart"
 
 interface ProductCardProps {
     product: Product
 }
 
+const priceFormat = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" })
+
 export function ProductCard({ product }: ProductCardProps) {
     return (
-        <div className="group relative overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card)] shadow-sm transition-all hover:shadow-md">
-            <div className="aspect-square w-full overflow-hidden bg-[var(--muted)] relative">
+        <div className="group relative flex flex-col overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card)] shadow-sm transition-shadow hover:shadow-md">
+            <div className="relative aspect-square w-full overflow-hidden bg-white">
                 {product.image ? (
-                    <div className="relative w-full h-full">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                            src={product.image}
-                            alt={product.name}
-                            className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
-                        />
-                    </div>
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                        src={product.image}
+                        alt={product.name}
+                        loading="lazy"
+                        className="h-full w-full object-contain p-3"
+                    />
                 ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-[var(--muted-foreground)] selection:bg-none">
+                    <div className="absolute inset-0 flex items-center justify-center bg-[var(--muted)] text-2xl font-semibold text-[var(--muted-foreground)] selection:bg-transparent">
                         {product.name.substring(0, 2)}
                     </div>
                 )}
             </div>
-            <div className="p-4">
-                <div className="mb-2 text-xs font-medium text-[var(--muted-foreground)]">
+            <div className="flex flex-1 flex-col p-3 sm:p-4">
+                <div className="mb-1 text-xs font-medium text-[var(--muted-foreground)]">
                     {product.category}
                 </div>
-                <h3 className="mb-2 text-lg font-semibold text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors">
-                    <Link href={`/productos/${product.slug}`}>
+                {!product.available && <span className="mb-1 text-xs font-semibold text-red-600">Agotado</span>}
+                <h3 className="mb-2 text-base font-medium leading-snug text-[var(--foreground)] transition-colors group-hover:text-[var(--primary)]">
+                    <Link href={`/productos/${product.slug}`} className="after:absolute after:inset-0">
                         {product.name}
                     </Link>
                 </h3>
-                <p className="mb-4 text-sm text-[var(--muted-foreground)] line-clamp-2">
-                    {product.description}
-                </p>
-                <div className="flex items-center justify-between">
+                {product.description && (
+                    <p className="mb-3 text-sm text-[var(--muted-foreground)] line-clamp-2">
+                        {product.description}
+                    </p>
+                )}
+                <div className="mt-auto flex flex-col gap-2 pt-2 sm:flex-row sm:items-center sm:justify-between">
                     <span className="text-lg font-bold text-[var(--primary)]">
-                        ${product.price.toFixed(2)}
+                        {priceFormat.format(product.price)}
                     </span>
-                    <Button size="sm" variant="secondary">
-                        <ShoppingCart className="mr-2 h-4 w-4" />
-                        Agregar
-                    </Button>
+                    <AddToCartButton product={product} />
                 </div>
             </div>
         </div>

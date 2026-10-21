@@ -8,6 +8,20 @@
       "when": 1769027382564,
       "tag": "0000_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792595603969,
+      "tag": "0001_catalogo_y_roles",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792600419461,
+      "tag": "0002_pedidos",
+      "breakpoints": true
     }
   ]
 }

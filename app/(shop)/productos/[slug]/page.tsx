@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
-import { products } from "@/lib/data"
-import { Button } from "@/components/ui/button"
-import { ShoppingCart, Check, Shield } from "lucide-react"
+import { getProductBySlug } from "@/lib/products"
+import { ProductPurchase } from "@/components/cart/add-to-cart"
+import { Check, Truck, Store } from "lucide-react"
 import Link from "next/link"
 
 export async function generateMetadata(
@@ -10,12 +10,12 @@ export async function generateMetadata(
     }
 ) {
     const params = await props.params;
-    const product = products.find((p) => p.slug === params.slug)
+    const product = await getProductBySlug(params.slug)
     if (!product) return { title: "Producto no encontrado" }
 
     return {
-        title: `${product.name} | Medicamento Homeopáticos Schussler`,
-        description: product.description,
+        title: `${product.name} | Homeopáticos Schüssler`,
+        description: product.description || `Compra ${product.name} en Homeopáticos Schüssler. Entrega a domicilio en CDMX o recoge en sucursal.`,
     }
 }
 
@@ -25,7 +25,7 @@ export default async function ProductPage(
     }
 ) {
     const params = await props.params;
-    const product = products.find((p) => p.slug === params.slug)
+    const product = await getProductBySlug(params.slug)
 
     if (!product) {
         notFound()
@@ -41,13 +41,13 @@ export default async function ProductPage(
 
             <div className="grid md:grid-cols-2 gap-10">
                 {/* Product Image Placeholder */}
-                <div className="aspect-square bg-[var(--muted)] rounded-xl overflow-hidden border border-[var(--border)] relative">
+                <div className="aspect-square bg-white rounded-xl overflow-hidden border border-[var(--border)] relative">
                     {product.image ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
                         <img
                             src={product.image}
                             alt={product.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain p-4"
                         />
                     ) : (
                         <div className="flex items-center justify-center h-full text-[var(--muted-foreground)] text-4xl font-bold">
@@ -63,12 +63,15 @@ export default async function ProductPage(
                             {product.category}
                         </span>
                     </div>
-                    <h1 className="text-4xl font-bold mb-4">{product.name}</h1>
-                    <p className="text-xl text-[var(--muted-foreground)] mb-6">{product.description}</p>
+                    <h1 className="text-4xl font-bold mb-2">{product.name}</h1>
+                    {product.presentation && <p className="mb-4 text-[var(--muted-foreground)]">{product.presentation}</p>}
+                    {product.description && (
+                        <p className="text-xl text-[var(--muted-foreground)] mb-6">{product.description}</p>
+                    )}
 
                     <div className="flex items-center gap-4 mb-8">
-                        <span className="text-3xl font-bold text-[var(--primary)]">${product.price.toFixed(2)}</span>
-                        {product.inStock ? (
+                        <span className="text-3xl font-bold text-[var(--primary)]">{new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(product.price)}</span>
+                        {product.available ? (
                             <span className="flex items-center text-sm text-[var(--accent)] font-medium bg-[var(--accent)]/10 px-2 py-1 rounded">
                                 <Check className="mr-1 h-3 w-3" /> Disponible
                             </span>
@@ -77,26 +80,21 @@ export default async function ProductPage(
                         )}
                     </div>
 
-                    <div className="space-y-4 mb-8">
-                        <div className="flex items-center gap-4">
-                            <div className="flex items-center rounded-md border border-[var(--border)]">
-                                <button className="px-3 py-2 hover:bg-[var(--muted)]">-</button>
-                                <span className="px-3 py-2 border-x border-[var(--border)] min-w-[3ch] text-center">1</span>
-                                <button className="px-3 py-2 hover:bg-[var(--muted)]">+</button>
-                            </div>
-                            <Button size="lg" className="flex-1">
-                                <ShoppingCart className="mr-2 h-5 w-5" /> Agregar al Carrito
-                            </Button>
-                        </div>
+                    <div className="mb-8">
+                        <ProductPurchase product={product} />
                     </div>
 
-                    <div className="border-t border-[var(--border)] pt-6 space-y-4">
+                    <div className="border-t border-[var(--border)] pt-6 space-y-3 text-sm">
                         <div className="flex items-start gap-3">
-                            <Shield className="h-5 w-5 text-[var(--primary)] mt-0.5" />
-                            <div>
-                                <h4 className="font-medium text-sm">Garantía de Calidad</h4>
-                                <p className="text-xs text-[var(--muted-foreground)]">Producto verificado por expertos homeópatas.</p>
-                            </div>
+                            <Truck className="h-5 w-5 text-[var(--primary)] mt-0.5" />
+                            <p className="text-[var(--muted-foreground)]">
+                                Entrega a domicilio en CDMX: gratis en compras superiores a $800; en compras menores el costo se calcula según tu código postal.{" "}
+                                <Link href="/envios" className="text-[var(--primary)] hover:underline">Ver condiciones</Link>
+                            </p>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <Store className="h-5 w-5 text-[var(--primary)] mt-0.5" />
+                            <p className="text-[var(--muted-foreground)]">O recógelo en sucursal: Alfonso Reyes 234, Ciudad de México.</p>
                         </div>
                     </div>
                 </div>

@@ -17,7 +17,7 @@ export default function RegisterPage() {
                         Crear una cuenta
                     </h2>
                     <p className="mt-2 text-center text-sm text-[var(--muted-foreground)]">
-                        Únete a Medicamento Homeopáticos Schussler y empieza tu camino hacia lo natural
+                        Únete a Homeopáticos Schüssler y empieza tu camino hacia lo natural
                     </p>
                 </div>
                 <form className="mt-8 space-y-6" action={action}>
