@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowRight, Search, ShoppingCart, Truck, Store } from "lucide-react"
+import { ArrowRightIcon, MagnifyingGlassIcon, ShoppingCartIcon, TruckIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/ui/button"
 import { BranchMap } from "@/components/shop/branch-map"
 import { ProductCard } from "@/components/shop/product-card"
@@ -22,7 +22,7 @@ export default async function Home() {
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
               <Link href="/productos">
                 <Button size="lg" className="gap-2">
-                  Ver productos <ArrowRight className="h-4 w-4" />
+                  Ver productos <ArrowRightIcon className="h-4 w-4" />
                 </Button>
               </Link>
               <Link
@@ -96,21 +96,21 @@ export default async function Home() {
           <h2 className="mb-6 text-2xl font-semibold tracking-tight">Cómo comprar</h2>
           <div className="grid gap-6 md:grid-cols-3">
             <div className="flex gap-4">
-              <Search className="mt-1 h-6 w-6 shrink-0 text-[var(--primary)]" />
+              <MagnifyingGlassIcon className="mt-1 h-6 w-6 shrink-0 text-[var(--primary)]" />
               <div>
                 <h3 className="font-semibold">1. Encuentra tu producto</h3>
                 <p className="text-sm text-[var(--muted-foreground)]">Usa el buscador o recorre las categorías.</p>
               </div>
             </div>
             <div className="flex gap-4">
-              <ShoppingCart className="mt-1 h-6 w-6 shrink-0 text-[var(--primary)]" />
+              <ShoppingCartIcon className="mt-1 h-6 w-6 shrink-0 text-[var(--primary)]" />
               <div>
                 <h3 className="font-semibold">2. Agrégalo al carrito</h3>
                 <p className="text-sm text-[var(--muted-foreground)]">Revisa cantidades, subtotal y total antes de pagar.</p>
               </div>
             </div>
             <div className="flex gap-4">
-              <Truck className="mt-1 h-6 w-6 shrink-0 text-[var(--primary)]" />
+              <TruckIcon className="mt-1 h-6 w-6 shrink-0 text-[var(--primary)]" />
               <div>
                 <h3 className="font-semibold">3. Recíbelo en CDMX</h3>
                 <p className="text-sm text-[var(--muted-foreground)]">Envío gratis en compras superiores a $800; en compras menores se calcula según tu código postal.</p>
@@ -119,7 +119,7 @@ export default async function Home() {
           </div>
           <div className="mt-8 flex flex-col gap-3 rounded-lg border border-[var(--border)] bg-[var(--muted)] p-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
-              <Store className="mt-0.5 h-5 w-5 shrink-0 text-[var(--primary)]" />
+              <BuildingStorefrontIcon className="mt-0.5 h-5 w-5 shrink-0 text-[var(--primary)]" />
               <p className="text-sm">
                 <span className="font-semibold">También puedes recoger en sucursal:</span> Alfonso Reyes 234, Ciudad de México.
               </p>

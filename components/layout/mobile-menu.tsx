@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, X } from "lucide-react"
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/ui/button"
 
 const links = [
@@ -26,7 +26,7 @@ export function MobileMenu() {
                 aria-controls="mobile-nav"
                 onClick={() => setOpen((value) => !value)}
             >
-                {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                {open ? <XMarkIcon className="h-5 w-5" /> : <Bars3Icon className="h-5 w-5" />}
             </Button>
             {open && (
                 <nav

@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { WhatsAppButton } from "@/components/shop/whatsapp-button"
+import { SocialLinks } from "@/components/shop/social-links"
+import { HOURS_LINES } from "@/lib/store-hours"
 
 export const metadata: Metadata = {
     title: "Contacto | Homeopáticos Schüssler",
@@ -21,8 +23,14 @@ export default function Page() {
                 </p>
                 <h2 className="pt-4 text-xl font-semibold text-[var(--foreground)]">Sucursal</h2>
                 <p>Alfonso Reyes 234, Ciudad de México.</p>
-                <h2 className="pt-4 text-xl font-semibold text-[var(--foreground)]">Horario de despacho</h2>
-                <p>Despachamos pedidos de 10:00 a 17:00 h. Las compras realizadas después de ese horario salen el siguiente día hábil.</p>
+                <h2 className="pt-4 text-xl font-semibold text-[var(--foreground)]">Horario de la sucursal</h2>
+                <ul>
+                    {HOURS_LINES.map((line) => (
+                        <li key={line.days}>{line.days}: {line.hours}</li>
+                    ))}
+                </ul>
+                <h2 className="pt-4 text-xl font-semibold text-[var(--foreground)]">Síguenos</h2>
+                <SocialLinks className="text-[var(--primary)]" />
             </div>
         </div>
     )

@@ -17,7 +17,6 @@ export default function Page() {
                 <ul className="list-disc space-y-2 pl-6">
                     <li>Envío gratuito en compras superiores a $800 MXN.</li>
                     <li>En compras menores, te confirmamos el costo del envío según tu código postal. Consúltalo por WhatsApp.</li>
-                    <li>Despachamos de 10:00 a 17:00 h; las compras posteriores salen el siguiente día hábil.</li>
                 </ul>
                 <p>
                     <WhatsAppButton message="Hola, quiero cotizar el envío a domicilio de mi pedido. Mi código postal es: ">Cotizar envío por WhatsApp</WhatsAppButton>

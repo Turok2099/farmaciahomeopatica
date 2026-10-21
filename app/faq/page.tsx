@@ -17,8 +17,8 @@ export default function Page() {
                 <p>Es gratuito en compras superiores a $800 MXN. En compras menores se calcula según tu código postal.</p>
                 <h2 className="pt-2 text-xl font-semibold text-[var(--foreground)]">¿Puedo recoger mi pedido?</h2>
                 <p>Sí, en nuestra sucursal de Alfonso Reyes 234, Ciudad de México.</p>
-                <h2 className="pt-2 text-xl font-semibold text-[var(--foreground)]">¿Cuándo despachan?</h2>
-                <p>De 10:00 a 17:00 h. Las compras posteriores salen el siguiente día hábil.</p>
+                <h2 className="pt-2 text-xl font-semibold text-[var(--foreground)]">¿Cuál es el horario de la sucursal?</h2>
+                <p>Lunes a viernes de 10:00 a 18:00 h y sábados de 10:00 a 17:00 h.</p>
                 <h2 className="pt-2 text-xl font-semibold text-[var(--foreground)]">¿Cómo los contacto?</h2>
                 <p>Por correo a <a href="mailto:contacto@schussler.com.mx" className="text-[var(--primary)] hover:underline">contacto@schussler.com.mx</a>.</p>
             </div>

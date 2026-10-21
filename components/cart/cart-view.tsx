@@ -1,7 +1,8 @@
 'use client'
 
 import Link from "next/link"
-import { ArrowLeft, Minus, Plus, Trash2 } from "lucide-react"
+import { DeliveryPromise } from "@/components/shop/delivery-promise"
+import { ArrowLeftIcon, MinusIcon, PlusIcon, TrashIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/ui/button"
 import { MAX_QUANTITY, useCart } from "@/components/cart/cart-provider"
 import { WhatsAppButton } from "@/components/shop/whatsapp-button"
@@ -21,7 +22,7 @@ export function CartView() {
             <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-[var(--border)] bg-[var(--muted)] py-16">
                 <p className="mb-4 text-[var(--muted-foreground)]">Tu carrito está vacío</p>
                 <Link href="/productos">
-                    <Button><ArrowLeft className="mr-2 h-4 w-4" />Explorar productos</Button>
+                    <Button><ArrowLeftIcon className="mr-2 h-4 w-4" />Explorar productos</Button>
                 </Link>
             </div>
         )
@@ -73,7 +74,7 @@ export function CartView() {
                                         disabled={item.quantity <= 1}
                                         onClick={() => setQuantity(item.productId, item.quantity - 1)}
                                     >
-                                        <Minus className="h-4 w-4" />
+                                        <MinusIcon className="h-4 w-4" />
                                     </button>
                                     <span className="min-w-[3ch] border-x border-[var(--border)] px-3 py-1.5 text-center text-sm" aria-live="polite">{item.quantity}</span>
                                     <button
@@ -83,7 +84,7 @@ export function CartView() {
                                         disabled={item.quantity >= MAX_QUANTITY}
                                         onClick={() => setQuantity(item.productId, item.quantity + 1)}
                                     >
-                                        <Plus className="h-4 w-4" />
+                                        <PlusIcon className="h-4 w-4" />
                                     </button>
                                 </div>
                                 <button
@@ -91,7 +92,7 @@ export function CartView() {
                                     onClick={() => remove(item.productId)}
                                     className="flex items-center gap-1 text-sm text-[var(--muted-foreground)] hover:text-red-600"
                                 >
-                                    <Trash2 className="h-4 w-4" /> Quitar
+                                    <TrashIcon className="h-4 w-4" /> Quitar
                                 </button>
                             </div>
                         </div>
@@ -100,6 +101,7 @@ export function CartView() {
             </ul>
 
             <aside className="h-fit rounded-lg border border-[var(--border)] bg-[var(--muted)] p-5">
+                <DeliveryPromise className="mb-4" />
                 <h2 className="mb-4 text-lg font-semibold">Resumen</h2>
                 <dl className="space-y-2 text-sm">
                     <div className="flex justify-between"><dt>Subtotal</dt><dd>{money.format(subtotal)}</dd></div>

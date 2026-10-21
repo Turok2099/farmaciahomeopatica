@@ -1,5 +1,7 @@
-import { Clock, MapPin, Store } from "lucide-react"
+import { ClockIcon, MapPinIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/ui/button"
+import { SocialLinks } from "@/components/shop/social-links"
+import { HOURS_LINES } from "@/lib/store-hours"
 
 // Coordenadas y enlace de inserción tomados del código "Insertar un mapa" de la ficha de Google Maps
 // "HOMEOPATICOS SCHUSSLER CONDESA" proporcionada por el negocio.
@@ -16,18 +18,22 @@ export function BranchMap() {
                     <p className="mt-2 text-[var(--muted-foreground)]">Consulta nuestra ubicación y planea tu visita.</p>
                     <ul className="mt-6 space-y-4 text-sm">
                         <li className="flex items-start gap-3">
-                            <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-[var(--primary)]" aria-hidden />
+                            <MapPinIcon className="mt-0.5 h-5 w-5 shrink-0 text-[var(--primary)]" aria-hidden />
                             <span>
                                 <span className="block font-semibold">Homeopáticos Schüssler</span>
                                 Alfonso Reyes 234, Ciudad de México
                             </span>
                         </li>
                         <li className="flex items-start gap-3">
-                            <Clock className="mt-0.5 h-5 w-5 shrink-0 text-[var(--primary)]" aria-hidden />
-                            <span>Despachos de 10:00 a 17:00 h; los pedidos posteriores salen el siguiente día hábil.</span>
+                            <ClockIcon className="mt-0.5 h-5 w-5 shrink-0 text-[var(--primary)]" aria-hidden />
+                            <dl>
+                                {HOURS_LINES.map((line) => (
+                                    <div key={line.days}><dt className="inline font-semibold">{line.days}: </dt><dd className="inline">{line.hours}</dd></div>
+                                ))}
+                            </dl>
                         </li>
                         <li className="flex items-start gap-3">
-                            <Store className="mt-0.5 h-5 w-5 shrink-0 text-[var(--primary)]" aria-hidden />
+                            <BuildingStorefrontIcon className="mt-0.5 h-5 w-5 shrink-0 text-[var(--primary)]" aria-hidden />
                             <span>Puedes recoger tu pedido en sucursal sin costo de envío.</span>
                         </li>
                     </ul>
@@ -37,6 +43,10 @@ export function BranchMap() {
                             <span className="sr-only"> (se abre en una pestaña nueva)</span>
                         </Button>
                     </a>
+                    <div className="mt-6 flex items-center gap-3 text-[var(--primary)]">
+                        <span className="text-sm font-medium text-[var(--foreground)]">Síguenos</span>
+                        <SocialLinks />
+                    </div>
                 </div>
                 <div className="h-[300px] w-full overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card)] lg:h-[380px]">
                     <iframe

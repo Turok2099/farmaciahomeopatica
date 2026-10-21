@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from "react"
-import { Check, Minus, Plus, ShoppingCart } from "lucide-react"
+import { CheckIcon, MinusIcon, PlusIcon, ShoppingCartIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/ui/button"
 import { MAX_QUANTITY, useCart } from "@/components/cart/cart-provider"
 import type { Product } from "@/lib/products"
@@ -38,7 +38,7 @@ export function AddToCartButton({ product }: { product: Product }) {
             disabled={!product.available}
             onClick={() => { add(toItem(product)); flash() }}
         >
-            {added ? <Check className="mr-2 h-4 w-4" /> : <ShoppingCart className="mr-2 h-4 w-4" />}
+            {added ? <CheckIcon className="mr-2 h-4 w-4" /> : <ShoppingCartIcon className="mr-2 h-4 w-4" />}
             {added ? "Agregado" : "Agregar"}
             <span className="sr-only" role="status">{added ? `${product.name} agregado al carrito` : ""}</span>
         </Button>
@@ -52,35 +52,35 @@ export function ProductPurchase({ product }: { product: Product }) {
     const [added, flash] = useAddedFeedback()
 
     return (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
             <div className="flex items-center rounded-md border border-[var(--border)]">
                 <button
                     type="button"
                     aria-label="Disminuir cantidad"
-                    className="px-3 py-2 hover:bg-[var(--muted)] disabled:opacity-40"
+                    className="px-3 py-3 hover:bg-[var(--muted)] disabled:opacity-40"
                     disabled={quantity <= 1 || !product.available}
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                 >
-                    <Minus className="h-4 w-4" />
+                    <MinusIcon className="h-4 w-4" />
                 </button>
                 <span className="min-w-[3ch] border-x border-[var(--border)] px-3 py-2 text-center" aria-live="polite">{quantity}</span>
                 <button
                     type="button"
                     aria-label="Aumentar cantidad"
-                    className="px-3 py-2 hover:bg-[var(--muted)] disabled:opacity-40"
+                    className="px-3 py-3 hover:bg-[var(--muted)] disabled:opacity-40"
                     disabled={quantity >= MAX_QUANTITY || !product.available}
                     onClick={() => setQuantity((q) => Math.min(MAX_QUANTITY, q + 1))}
                 >
-                    <Plus className="h-4 w-4" />
+                    <PlusIcon className="h-4 w-4" />
                 </button>
             </div>
             <Button
                 size="lg"
-                className="flex-1"
+                className="min-w-0 flex-1 px-3"
                 disabled={!product.available}
                 onClick={() => { add(toItem(product), quantity); flash(); setQuantity(1) }}
             >
-                {added ? <Check className="mr-2 h-5 w-5" /> : <ShoppingCart className="mr-2 h-5 w-5" />}
+                {added ? <CheckIcon className="mr-2 h-5 w-5" /> : <ShoppingCartIcon className="mr-2 h-5 w-5" />}
                 {product.available ? (added ? "Agregado al carrito" : "Agregar al carrito") : "Agotado"}
                 <span className="sr-only" role="status">{added ? `${product.name} agregado al carrito` : ""}</span>
             </Button>

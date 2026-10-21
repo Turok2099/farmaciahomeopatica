@@ -50,7 +50,7 @@ export default async function ProductsPage(props: {
 
     const linkClass = (active: boolean) =>
         cn(
-            "rounded-full border border-[var(--border)] px-3 py-1 text-sm transition-colors hover:border-[var(--primary)]",
+            "rounded-full border border-[var(--border)] inline-flex min-h-10 items-center px-4 py-1 text-sm transition-colors hover:border-[var(--primary)]",
             active && "border-[var(--primary)] bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary)]"
         )
 

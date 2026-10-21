@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { User, Search } from "lucide-react"
+import { UserIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/ui/button"
 import { MobileMenu } from "@/components/layout/mobile-menu"
 import { CartLink } from "@/components/cart/cart-link"
@@ -43,14 +43,14 @@ export function Navbar() {
                             placeholder="Buscar..."
                             className="h-9 w-64 rounded-md border border-transparent bg-white px-3 py-1 pr-9 text-sm text-[#172b3a] shadow-sm placeholder:text-[#5b6b78] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                         />
-                        <button type="submit" aria-label="Buscar" className="absolute right-2 top-2.5">
-                            <Search className="h-4 w-4 text-[#5b6b78]" />
+                        <button type="submit" aria-label="Buscar" className="absolute right-0 top-0 flex h-9 w-9 items-center justify-center">
+                            <MagnifyingGlassIcon className="h-4 w-4 text-[#5b6b78]" />
                         </button>
                     </form>
 
                     <Link href="/auth/login" className="rounded-md focus-visible:outline-2 focus-visible:outline-white">
                         <Button variant="ghost" size="icon" className="hover:bg-white/15 hover:text-white">
-                            <User className="h-5 w-5" />
+                            <UserIcon className="h-5 w-5" />
                             <span className="sr-only">Cuenta</span>
                         </Button>
                     </Link>
@@ -67,10 +67,10 @@ export function Navbar() {
                     name="q"
                     type="search"
                     placeholder="Buscar productos..."
-                    className="h-10 w-full rounded-md border border-transparent bg-white px-3 pr-10 text-sm text-[#172b3a] placeholder:text-[#5b6b78] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    className="h-11 w-full rounded-md border border-transparent bg-white px-3 pr-12 text-base text-[#172b3a] placeholder:text-[#5b6b78] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 />
-                <button type="submit" aria-label="Buscar" className="absolute right-7 top-2.5 sm:right-9">
-                    <Search className="h-4 w-4 text-[#5b6b78]" />
+                <button type="submit" aria-label="Buscar" className="absolute right-4 top-0 flex h-11 w-10 items-center justify-center sm:right-6 lg:right-8">
+                    <MagnifyingGlassIcon className="h-4 w-4 text-[#5b6b78]" />
                 </button>
             </form>
         </header>

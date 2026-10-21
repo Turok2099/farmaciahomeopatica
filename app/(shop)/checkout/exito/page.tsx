@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { CheckCircle2, Clock } from "lucide-react"
+import { CheckCircleIcon, ClockIcon } from "@heroicons/react/24/outline"
 import { getStripe } from "@/lib/stripe"
 import { getOrderByPublicId, markOrderPaid } from "@/lib/orders"
 import { ClearCart, Refresh } from "@/components/cart/success-helpers"
@@ -45,7 +45,7 @@ export default async function SuccessPage(props: { searchParams: Promise<{ pedid
             {order.status === "pending" && <Refresh />}
 
             <div className="mb-8 text-center">
-                {paid ? <CheckCircle2 className="mx-auto mb-3 h-12 w-12 text-[var(--accent)]" /> : <Clock className="mx-auto mb-3 h-12 w-12 text-[var(--muted-foreground)]" />}
+                {paid ? <CheckCircleIcon className="mx-auto mb-3 h-12 w-12 text-[var(--accent)]" /> : <ClockIcon className="mx-auto mb-3 h-12 w-12 text-[var(--muted-foreground)]" />}
                 <h1 className="text-3xl font-bold">
                     {paid ? "¡Gracias por tu compra!" : order.status === "cancelled" ? "Pedido cancelado" : "Confirmando tu pago…"}
                 </h1>
@@ -62,12 +62,11 @@ export default async function SuccessPage(props: { searchParams: Promise<{ pedid
                 <h2 className="mb-3 font-semibold">{pickup ? "Recoger en sucursal" : "Entrega a domicilio"}</h2>
                 {pickup ? (
                     <p className="text-sm text-[var(--muted-foreground)]">
-                        Alfonso Reyes 234, Ciudad de México. Despachamos de 10:00 a 17:00 h; los pedidos posteriores se preparan el siguiente día hábil. Te avisaremos cuando esté listo.
+                        Alfonso Reyes 234, Ciudad de México. Horario: lunes a viernes de 10:00 a 18:00 h y sábados de 10:00 a 17:00 h. Te avisaremos cuando esté listo.
                     </p>
                 ) : (
                     <p className="text-sm text-[var(--muted-foreground)]">
                         {order.addressStreet}, {order.addressNeighborhood}, CP {order.addressPostalCode}, Ciudad de México.
-                        Despachamos de 10:00 a 17:00 h; los pedidos posteriores salen el siguiente día hábil.
                     </p>
                 )}
                 <ul className="mt-5 divide-y divide-[var(--border)] border-t border-[var(--border)] text-sm">

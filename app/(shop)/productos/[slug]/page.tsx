@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation"
 import { getProductBySlug } from "@/lib/products"
 import { ProductPurchase } from "@/components/cart/add-to-cart"
-import { Check, Truck, Store } from "lucide-react"
+import { DeliveryPromise } from "@/components/shop/delivery-promise"
+import { CheckIcon, TruckIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
 
 export async function generateMetadata(
@@ -73,7 +74,7 @@ export default async function ProductPage(
                         <span className="text-3xl font-bold text-[var(--primary)]">{new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(product.price)}</span>
                         {product.available ? (
                             <span className="flex items-center text-sm text-[var(--accent)] font-medium bg-[var(--accent)]/10 px-2 py-1 rounded">
-                                <Check className="mr-1 h-3 w-3" /> Disponible
+                                <CheckIcon className="mr-1 h-3 w-3" /> Disponible
                             </span>
                         ) : (
                             <span className="text-sm text-red-500 font-medium">Agotado</span>
@@ -84,16 +85,18 @@ export default async function ProductPage(
                         <ProductPurchase product={product} />
                     </div>
 
+                    <DeliveryPromise />
+
                     <div className="border-t border-[var(--border)] pt-6 space-y-3 text-sm">
                         <div className="flex items-start gap-3">
-                            <Truck className="h-5 w-5 text-[var(--primary)] mt-0.5" />
+                            <TruckIcon className="h-5 w-5 shrink-0 text-[var(--primary)] mt-0.5" />
                             <p className="text-[var(--muted-foreground)]">
                                 Entrega a domicilio en CDMX: gratis en compras superiores a $800; en compras menores el costo se calcula según tu código postal.{" "}
                                 <Link href="/envios" className="text-[var(--primary)] hover:underline">Ver condiciones</Link>
                             </p>
                         </div>
                         <div className="flex items-start gap-3">
-                            <Store className="h-5 w-5 text-[var(--primary)] mt-0.5" />
+                            <BuildingStorefrontIcon className="h-5 w-5 shrink-0 text-[var(--primary)] mt-0.5" />
                             <p className="text-[var(--muted-foreground)]">O recógelo en sucursal: Alfonso Reyes 234, Ciudad de México.</p>
                         </div>
                     </div>

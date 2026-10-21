@@ -1,4 +1,4 @@
-import { MessageCircle } from "lucide-react"
+import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/outline"
 import { cn } from "@/lib/utils"
 
 // Número en formato internacional, solo dígitos: 5215512345678. Se define en .env.local.
@@ -31,7 +31,7 @@ export function WhatsAppButton({
                 className
             )}
         >
-            <MessageCircle className="h-4 w-4" aria-hidden />
+            <ChatBubbleLeftEllipsisIcon className="h-4 w-4" aria-hidden />
             {children}
             <span className="sr-only"> (se abre en una pestaña nueva)</span>
         </a>
