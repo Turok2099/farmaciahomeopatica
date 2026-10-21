@@ -1,50 +1,69 @@
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Search, ShoppingCart, Truck, Store } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ProductCard } from "@/components/shop/product-card"
-import { getFeaturedProducts, getStoreCategories } from "@/lib/products"
+import { getFeaturedProducts, getCategoryCards } from "@/lib/products"
 
 export default async function Home() {
-  const [categories, featuredProducts] = await Promise.all([getStoreCategories(), getFeaturedProducts()])
+  const [categories, featuredProducts] = await Promise.all([getCategoryCards(), getFeaturedProducts()])
 
   return (
     <div className="flex flex-col">
-      {/* Presentación compacta */}
-      <section className="bg-[var(--muted)] py-10 md:py-14">
-        <div className="container-custom max-w-3xl text-center">
-          <h1 className="text-3xl font-semibold tracking-tight md:text-5xl">Homeopáticos Schüssler</h1>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-[var(--muted-foreground)]">
-            Consulta nuestro catálogo y encuentra tu presentación.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-            <Link href="/productos">
-              <Button size="lg" className="gap-2">
-                Ver productos <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <a
-              href="mailto:contacto@schussler.com.mx"
-              className="text-sm font-medium text-[var(--primary)] underline-offset-4 hover:underline"
-            >
-              Escríbenos a contacto@schussler.com.mx
-            </a>
+      {/* Portada: en escritorio el texto va sobre el espacio libre de la imagen; en móvil, encima de ella */}
+      <section className="relative bg-[var(--background)]">
+        <div className="container-custom pb-6 pt-8 lg:absolute lg:inset-0 lg:z-10 lg:flex lg:items-center lg:pb-0 lg:pt-0">
+          <div className="max-w-xl lg:max-w-[36%] lg:text-[#172b3a]">
+            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl xl:text-5xl">Homeopáticos Schüssler</h1>
+            <p className="mt-3 text-lg text-[var(--muted-foreground)] lg:text-[#3d4f5c]">
+              Consulta nuestro catálogo y encuentra tu presentación.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <Link href="/productos">
+                <Button size="lg" className="gap-2">
+                  Ver productos <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link
+                href="/contacto"
+                className="rounded-sm text-sm font-medium text-[var(--primary)] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)] lg:text-[#014c80]"
+              >
+                ¿Necesitas ayuda?
+              </Link>
+            </div>
           </div>
         </div>
-        <div aria-hidden className="mx-auto mt-10 h-1.5 max-w-5xl bg-[var(--silver)] [clip-path:polygon(0_0,100%_0,92%_100%,0_100%)]" />
+        <Image
+          src="/images/portada-homeopaticos-schussler.png"
+          alt="Productos Homeopáticos Schüssler: jarabe, gel, aceite, pomada y sales sobre una base de piedra con hojas verdes"
+          width={1944}
+          height={809}
+          priority
+          sizes="100vw"
+          className="h-auto w-full"
+        />
       </section>
 
       {/* Categorías */}
-      <section className="py-12">
+      <section className="border-t border-[var(--silver)]/40 py-12">
         <div className="container-custom">
           <h2 className="mb-6 text-2xl font-semibold tracking-tight">Categorías</h2>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
             {categories.map((category) => (
               <Link
-                key={category}
-                href={`/productos?categoria=${encodeURIComponent(category)}`}
-                className="rounded-lg border border-[var(--border)] bg-[var(--card)] px-4 py-5 text-center font-medium transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]"
+                key={category.name}
+                href={`/productos?categoria=${encodeURIComponent(category.name)}`}
+                className="group flex items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--card)] p-2 pr-3 transition-colors hover:border-[var(--primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
               >
-                {category}
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-md bg-white">
+                  {category.image ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={category.image} alt="" loading="lazy" className="h-full w-full object-contain p-1" />
+                  ) : (
+                    <span className="text-sm font-semibold text-[#5b6b78]">{category.name.substring(0, 2)}</span>
+                  )}
+                </span>
+                <span className="text-sm font-medium leading-tight group-hover:text-[var(--primary)]">{category.name}</span>
               </Link>
             ))}
           </div>
@@ -97,7 +116,7 @@ export default async function Home() {
               </div>
             </div>
           </div>
-          <div className="mt-8 flex flex-col gap-3 rounded-lg border border-[var(--border)] p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-8 flex flex-col gap-3 rounded-lg border border-[var(--border)] bg-[var(--muted)] p-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-3">
               <Store className="mt-0.5 h-5 w-5 shrink-0 text-[var(--primary)]" />
               <p className="text-sm">

@@ -98,3 +98,23 @@ export async function getStoreCategories(): Promise<string[]> {
         .orderBy(asc(categories.name));
     return rows.map((r) => r.name);
 }
+
+// Categorías con la foto de uno de sus productos publicados (el destacado primero).
+export async function getCategoryCards(): Promise<{ name: string; image: string }[]> {
+    const rows = await db
+        .select({ name: categories.name, imageId: productsTable.imageId, featured: productsTable.featured })
+        .from(categories)
+        .innerJoin(productsTable, eq(productsTable.categoryId, categories.id))
+        .where(eq(productsTable.published, true))
+        .orderBy(asc(categories.name), asc(productsTable.name));
+    const byName = new Map<string, { name: string; image: string; featured: boolean }>();
+    for (const row of rows) {
+        const image = imageUrl(row.imageId, 300);
+        const current = byName.get(row.name);
+        if (!current) byName.set(row.name, { name: row.name, image, featured: row.featured && !!image });
+        else if (image && (!current.image || (row.featured && !current.featured))) {
+            byName.set(row.name, { name: row.name, image, featured: row.featured });
+        }
+    }
+    return [...byName.values()].map(({ name, image }) => ({ name, image }));
+}

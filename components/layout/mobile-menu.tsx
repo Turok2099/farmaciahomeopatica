@@ -20,6 +20,7 @@ export function MobileMenu() {
             <Button
                 variant="ghost"
                 size="icon"
+                className="hover:bg-white/15 hover:text-white"
                 aria-label={open ? "Cerrar menú" : "Abrir menú"}
                 aria-expanded={open}
                 aria-controls="mobile-nav"

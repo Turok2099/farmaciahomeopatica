@@ -7,8 +7,8 @@ import { CartLink } from "@/components/cart/cart-link"
 
 export function Navbar() {
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-[var(--border)] bg-[var(--background)]/95 backdrop-blur supports-[backdrop-filter]:bg-[var(--background)]/60">
-            <div className="container-custom flex h-16 items-center justify-between">
+        <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[var(--brand)] text-white">
+            <div className="container-custom flex h-20 items-center justify-between">
                 <div className="flex items-center gap-6">
                     <Link href="/" className="flex items-center">
                         <Image
@@ -17,17 +17,17 @@ export function Navbar() {
                             width={600}
                             height={198}
                             priority
-                            className="h-10 w-auto"
+                            className="h-12 w-auto sm:h-14"
                         />
                     </Link>
                     <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-                        <Link href="/" className="transition-colors hover:text-[var(--primary)]">
+                        <Link href="/" className="rounded-sm transition-colors hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-white">
                             Inicio
                         </Link>
-                        <Link href="/productos" className="transition-colors hover:text-[var(--primary)]">
+                        <Link href="/productos" className="rounded-sm transition-colors hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-white">
                             Productos
                         </Link>
-                        <Link href="/nosotros" className="transition-colors hover:text-[var(--primary)]">
+                        <Link href="/nosotros" className="rounded-sm transition-colors hover:underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-white">
                             Nosotros
                         </Link>
                     </nav>
@@ -41,15 +41,15 @@ export function Navbar() {
                             name="q"
                             type="search"
                             placeholder="Buscar..."
-                            className="h-9 w-64 rounded-md border border-[var(--border)] bg-transparent px-3 py-1 pr-9 text-sm shadow-sm transition-colors placeholder:text-[var(--muted-foreground)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--primary)]"
+                            className="h-9 w-64 rounded-md border border-transparent bg-white px-3 py-1 pr-9 text-sm text-[#172b3a] shadow-sm placeholder:text-[#5b6b78] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                         />
                         <button type="submit" aria-label="Buscar" className="absolute right-2 top-2.5">
-                            <Search className="h-4 w-4 text-[var(--muted-foreground)]" />
+                            <Search className="h-4 w-4 text-[#5b6b78]" />
                         </button>
                     </form>
 
-                    <Link href="/auth/login">
-                        <Button variant="ghost" size="icon">
+                    <Link href="/auth/login" className="rounded-md focus-visible:outline-2 focus-visible:outline-white">
+                        <Button variant="ghost" size="icon" className="hover:bg-white/15 hover:text-white">
                             <User className="h-5 w-5" />
                             <span className="sr-only">Cuenta</span>
                         </Button>
@@ -67,10 +67,10 @@ export function Navbar() {
                     name="q"
                     type="search"
                     placeholder="Buscar productos..."
-                    className="h-10 w-full rounded-md border border-[var(--border)] bg-transparent px-3 pr-10 text-sm placeholder:text-[var(--muted-foreground)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--primary)]"
+                    className="h-10 w-full rounded-md border border-transparent bg-white px-3 pr-10 text-sm text-[#172b3a] placeholder:text-[#5b6b78] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 />
                 <button type="submit" aria-label="Buscar" className="absolute right-7 top-2.5 sm:right-9">
-                    <Search className="h-4 w-4 text-[var(--muted-foreground)]" />
+                    <Search className="h-4 w-4 text-[#5b6b78]" />
                 </button>
             </form>
         </header>

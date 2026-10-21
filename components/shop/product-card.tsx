@@ -10,7 +10,7 @@ const priceFormat = new Intl.NumberFormat("es-MX", { style: "currency", currency
 
 export function ProductCard({ product }: ProductCardProps) {
     return (
-        <div className="group relative flex flex-col overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card)] shadow-sm transition-shadow hover:shadow-md">
+        <div className="group relative flex flex-col overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card)] transition-shadow hover:shadow-md focus-within:ring-2 focus-within:ring-[var(--primary)]">
             <div className="relative aspect-square w-full overflow-hidden bg-white">
                 {product.image ? (
                     /* eslint-disable-next-line @next/next/no-img-element */
@@ -18,7 +18,7 @@ export function ProductCard({ product }: ProductCardProps) {
                         src={product.image}
                         alt={product.name}
                         loading="lazy"
-                        className="h-full w-full object-contain p-3"
+                        className="h-full w-full object-contain p-4"
                     />
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center bg-[var(--muted)] text-2xl font-semibold text-[var(--muted-foreground)] selection:bg-transparent">
@@ -31,7 +31,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     {product.category}
                 </div>
                 {!product.available && <span className="mb-1 text-xs font-semibold text-red-600">Agotado</span>}
-                <h3 className="mb-2 text-base font-medium leading-snug text-[var(--foreground)] transition-colors group-hover:text-[var(--primary)]">
+                <h3 className="mb-2 text-base font-semibold leading-snug text-[var(--foreground)] transition-colors group-hover:text-[var(--primary)]">
                     <Link href={`/productos/${product.slug}`} className="after:absolute after:inset-0">
                         {product.name}
                     </Link>
@@ -42,7 +42,7 @@ export function ProductCard({ product }: ProductCardProps) {
                     </p>
                 )}
                 <div className="mt-auto flex flex-col gap-2 pt-2 sm:flex-row sm:items-center sm:justify-between">
-                    <span className="text-lg font-bold text-[var(--primary)]">
+                    <span className="text-lg font-bold text-[var(--foreground)]">
                         {priceFormat.format(product.price)}
                     </span>
                     <AddToCartButton product={product} />

@@ -27,6 +27,10 @@
 
   --border: #dde3ea;
 
+  /* Azul fijo del logo para encabezado y pie (igual en ambos temas) */
+  --brand: #014c80;
+  --brand-deep: #01365a;
+
   /* Gris plateado de la franja del logo */
   --silver: #b0b1b4;
 }

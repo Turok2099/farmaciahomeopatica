@@ -33,7 +33,7 @@ export function AddToCartButton({ product }: { product: Product }) {
     return (
         <Button
             size="sm"
-            variant="secondary"
+            variant="default"
             className="relative z-10"
             disabled={!product.available}
             onClick={() => { add(toItem(product)); flash() }}
