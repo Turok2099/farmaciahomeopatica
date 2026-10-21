@@ -2,6 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRight, Search, ShoppingCart, Truck, Store } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { BranchMap } from "@/components/shop/branch-map"
 import { ProductCard } from "@/components/shop/product-card"
 import { getFeaturedProducts, getCategoryCards } from "@/lib/products"
 
@@ -129,6 +130,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <BranchMap />
     </div>
   )
 }
