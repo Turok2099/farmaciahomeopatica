@@ -4,7 +4,7 @@
 import { hash, compare } from 'bcryptjs'
 import { db } from "@/lib/db"
 import { users } from "@/lib/schema"
-import { eq } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 import { createSession, deleteSession } from "@/lib/session"
 import { clientIp, rateLimit, TOO_MANY_ATTEMPTS } from "@/lib/rate-limit"
 import { consumeResetTokens, findUserByEmail, findUserByResetToken, sendPasswordResetEmail } from "@/lib/password-reset"
@@ -125,7 +125,7 @@ export async function login(prevState: FormState, formData: FormData): Promise<F
             }
         }
 
-        await createSession(user.id.toString())
+        await createSession(user.id.toString(), user.sessionVersion)
     } catch (error) {
         return {
             message: "Ocurrió un error inesperado.",
@@ -180,9 +180,13 @@ export async function resetPassword(prevState: FormState, formData: FormData): P
     if (!userId) return { message: "El enlace no es válido o ya venció. Solicita uno nuevo." }
 
     try {
-        await db.update(users).set({ password: await hash(password, 10) }).where(eq(users.id, userId))
+        // Subir la versión cierra todas las sesiones abiertas (por ejemplo, la de quien robó una cookie).
+        const [updated] = await db.update(users)
+            .set({ password: await hash(password, 10), sessionVersion: sql`${users.sessionVersion} + 1` })
+            .where(eq(users.id, userId))
+            .returning({ sessionVersion: users.sessionVersion })
         await consumeResetTokens(userId)
-        await createSession(userId.toString())
+        await createSession(userId.toString(), updated.sessionVersion)
     } catch (error) {
         console.error("Restablecer contraseña: error", error instanceof Error ? error.message : error)
         return { message: "Ocurrió un error inesperado. Inténtalo de nuevo." }

@@ -1,9 +1,10 @@
 import { cookies } from "next/headers";
 import { encrypt, decrypt } from "@/lib/jwt";
 
-export async function createSession(userId: string) {
+// `version` es users.session_version al emitir la sesión; getCurrentUser la compara en cada petición.
+export async function createSession(userId: string, version = 0) {
     const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    const session = await encrypt({ userId, expires });
+    const session = await encrypt({ userId, sv: version, expires });
 
     const cookieStore = await cookies();
     cookieStore.set("session", session, {

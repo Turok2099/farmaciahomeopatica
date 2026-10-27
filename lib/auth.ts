@@ -5,16 +5,18 @@ import { db } from "@/lib/db";
 import { users, type UserRole } from "@/lib/schema";
 import { getSession } from "@/lib/session";
 
-// El rol se lee de la base en cada petición: quitar un permiso surte efecto de inmediato.
+// El rol y la versión de sesión se leen de la base en cada petición: quitar un permiso o cambiar la
+// contraseña surte efecto de inmediato. Las sesiones emitidas antes de existir `sv` cuentan como versión 0.
 export const getCurrentUser = cache(async () => {
     const session = await getSession();
     const userId = Number(session?.userId);
     if (!userId) return null;
     const [user] = await db
-        .select({ id: users.id, name: users.name, email: users.email, role: users.role })
+        .select({ id: users.id, name: users.name, email: users.email, role: users.role, sessionVersion: users.sessionVersion })
         .from(users)
         .where(eq(users.id, userId));
-    return user ?? null;
+    if (!user || Number(session?.sv ?? 0) !== user.sessionVersion) return null;
+    return user;
 });
 
 // Úsalo en cada página y acción del panel: no basta con ocultar enlaces.

@@ -8,7 +8,7 @@ import { db } from '@/lib/db'
 import { orders, orderItems } from '@/lib/schema'
 import { getProductsByIds } from '@/lib/products'
 import { getStripe, siteUrl } from '@/lib/stripe'
-import { getSession } from '@/lib/session'
+import { getCurrentUser } from '@/lib/auth'
 import { FREE_SHIPPING_OVER_CENTS, isCdmxPostalCode } from '@/lib/orders'
 import { generateOrderNumber, isUniqueViolation } from "@/lib/order-number"
 
@@ -79,8 +79,7 @@ export async function createCheckout(prev: CheckoutState, formData: FormData): P
         return { message: 'La entrega a domicilio con envío incluido aplica en compras mayores a $800. Cotiza tu envío por WhatsApp o elige recoger en sucursal.' }
     }
 
-    const session = await getSession()
-    const userId = Number(session?.userId) || null
+    const userId = (await getCurrentUser())?.id ?? null
     const publicId = randomBytes(16).toString('hex')
     const isDelivery = data.fulfillment === 'delivery'
 

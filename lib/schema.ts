@@ -11,6 +11,8 @@ export const users = pgTable('users', {
     password: text('password').notNull(),
     // admin: único (índice parcial); staff: solo activa/desactiva productos; customer: cliente.
     role: text('role').$type<UserRole>().notNull().default('customer'),
+    // Se incrementa al cambiar la contraseña: invalida todas las sesiones abiertas (el token guarda la versión con que se emitió).
+    sessionVersion: integer('session_version').notNull().default(0),
     createdAt: timestamp('created_at').defaultNow(),
 }, (table) => [
     uniqueIndex('users_single_admin').on(table.role).where(sql`${table.role} = 'admin'`),

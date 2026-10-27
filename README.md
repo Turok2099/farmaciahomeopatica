@@ -95,6 +95,7 @@ Copia el `whsec_…` que imprime en `STRIPE_WEBHOOK_SECRET` de `.env.local`. Tar
 
 - **Límite de intentos** en inicio de sesión, registro y recuperación de contraseña, guardado en la tabla `rate_limits` (`lib/rate-limit.ts`).
 - **Campo trampa** contra bots en los formularios de autenticación.
+- **Sesiones:** JWT de 7 días con la versión de sesión del usuario (`users.session_version`). Al restablecer la contraseña se incrementa y todas las sesiones anteriores dejan de valer. Rotar `JWT_SECRET` cierra todas las sesiones.
 - **Recuperar contraseña:** enlace de un solo uso que vence en 1 hora. Solo se guarda el hash del token.
 - **Cabeceras** (CSP, `X-Frame-Options`, HSTS, etc.) en `next.config.ts`. Si agregas un servicio externo (analítica, mapas, scripts de terceros), hay que permitir su dominio en la CSP.
 

@@ -2,11 +2,14 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { logout } from "@/app/actions/auth"
+import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth"
 
 export default async function DashboardPage() {
     const user = await getCurrentUser()
-    const canManage = user?.role === "admin" || user?.role === "staff"
+    // Sesión vencida o invalidada (p. ej. se cambió la contraseña): hay que volver a entrar.
+    if (!user) redirect("/auth/login")
+    const canManage = user.role === "admin" || user.role === "staff"
 
     return (
         <div className="container-custom py-10">
