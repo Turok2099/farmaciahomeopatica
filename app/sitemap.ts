@@ -13,6 +13,8 @@ const STATIC_PAGES = [
     { path: "/nosotros", priority: 0.4 },
     { path: "/contacto", priority: 0.4 },
     { path: "/privacidad", priority: 0.2 },
+    { path: "/terminos", priority: 0.2 },
+    { path: "/devoluciones", priority: 0.2 },
 ]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

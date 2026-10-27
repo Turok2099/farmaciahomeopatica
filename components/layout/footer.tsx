@@ -53,6 +53,8 @@ export function Footer() {
                             <li><Link href="/productos" className={linkClass}>Productos</Link></li>
                             <li><Link href="/nosotros" className={linkClass}>Sobre nosotros</Link></li>
                             <li><Link href="/privacidad" className={linkClass}>Aviso de privacidad</Link></li>
+                            <li><Link href="/terminos" className={linkClass}>Términos y condiciones</Link></li>
+                            <li><Link href="/devoluciones" className={linkClass}>Política de devoluciones</Link></li>
                         </ul>
                     </div>
                 </div>

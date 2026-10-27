@@ -141,6 +141,10 @@ export function CheckoutForm() {
                     {pending ? "Redirigiendo al pago…" : "Pagar con tarjeta"}
                 </Button>
                 <p className="mt-3 text-xs text-[var(--muted-foreground)]">Pagas en la página segura de Stripe. No guardamos los datos de tu tarjeta.</p>
+                <p className="mt-2 text-xs text-[var(--muted-foreground)]">
+                    Al pagar aceptas los <Link href="/terminos" className="underline">términos y condiciones</Link>, el <Link href="/privacidad" className="underline">aviso de privacidad</Link> y
+                    la <Link href="/devoluciones" className="underline">política de devoluciones</Link> (no hay devoluciones de productos).
+                </p>
                 <Link href="/carrito" className="mt-3 block text-center text-sm text-[var(--primary)] hover:underline">Volver al carrito</Link>
             </aside>
         </form>
