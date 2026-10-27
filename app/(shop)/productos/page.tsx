@@ -1,11 +1,28 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { getProducts, getStoreCategories } from "@/lib/products"
 import { ProductCard } from "@/components/shop/product-card"
 import { cn } from "@/lib/utils"
 
-export const metadata = {
-    title: "Nuestros Productos | Homeopáticos Schüssler",
-    description: "Catálogo completo de productos de Homeopáticos Schüssler.",
+export async function generateMetadata(props: {
+    searchParams: Promise<{ categoria?: string; q?: string; orden?: string }>
+}): Promise<Metadata> {
+    const { categoria, q, orden } = await props.searchParams
+    const categories = await getStoreCategories().catch(() => [] as string[])
+    const activeCategory = categories.find((c) => c === categoria)
+    const title = activeCategory ? `${activeCategory}: productos homeopáticos` : "Productos homeopáticos y sales de Schüssler"
+
+    return {
+        title,
+        description: activeCategory
+            ? `Compra ${activeCategory.toLowerCase()} de Homeopáticos Schüssler. Entrega a domicilio en CDMX o recoge en sucursal en la Condesa.`
+            : "Catálogo de productos homeopáticos y sales de Schüssler. Entrega a domicilio en CDMX o recoge en sucursal en la Condesa.",
+        // Las búsquedas y el orden duplican contenido: no se indexan. La categoría conserva su propia URL canónica.
+        alternates: {
+            canonical: activeCategory ? `/productos?categoria=${encodeURIComponent(activeCategory)}` : "/productos",
+        },
+        robots: q?.trim() || orden ? { index: false, follow: true } : undefined,
+    }
 }
 
 const sortOptions = [

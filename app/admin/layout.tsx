@@ -6,7 +6,7 @@ import { orders } from "@/lib/schema"
 import { requireRole } from "@/lib/auth"
 
 export const metadata: Metadata = {
-    title: "Panel | Homeopáticos Schüssler",
+    title: "Panel",
     robots: { index: false, follow: false },
 }
 

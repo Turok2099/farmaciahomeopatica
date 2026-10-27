@@ -2,7 +2,8 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 export const metadata: Metadata = {
-    title: "Nosotros | Homeopáticos Schüssler",
+    title: "Nosotros",
+    alternates: { canonical: "/nosotros" },
     description: "Conoce Homeopáticos Schüssler, con sucursal en la Ciudad de México.",
 }
 

@@ -4,19 +4,29 @@ import { ProductPurchase } from "@/components/cart/add-to-cart"
 import { DeliveryPromise } from "@/components/shop/delivery-promise"
 import { CheckIcon, TruckIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
+import type { Metadata } from "next"
+import { JsonLd } from "@/components/seo/json-ld"
+import { SITE_URL, SITE_NAME } from "@/lib/site"
 
 export async function generateMetadata(
     props: {
         params: Promise<{ slug: string }>;
     }
-) {
+): Promise<Metadata> {
     const params = await props.params;
     const product = await getProductBySlug(params.slug)
-    if (!product) return { title: "Producto no encontrado" }
+    if (!product) return { title: "Producto no encontrado", robots: { index: false } }
+
+    const description = product.description
+        || `Compra ${product.name}${product.presentation ? ` (${product.presentation})` : ""} en Homeopáticos Schüssler. Entrega a domicilio en CDMX o recoge en sucursal.`
+    const images = product.image ? [{ url: product.image, alt: product.name }] : undefined
 
     return {
-        title: `${product.name} | Homeopáticos Schüssler`,
-        description: product.description || `Compra ${product.name} en Homeopáticos Schüssler. Entrega a domicilio en CDMX o recoge en sucursal.`,
+        title: product.name,
+        description,
+        alternates: { canonical: `/productos/${product.slug}` },
+        openGraph: { type: "website", title: product.name, description, url: `/productos/${product.slug}`, images },
+        twitter: { card: images ? "summary_large_image" : "summary", title: product.name, description, images: images?.map((i) => i.url) },
     }
 }
 
@@ -32,8 +42,43 @@ export default async function ProductPage(
         notFound()
     }
 
+    const url = `${SITE_URL}/productos/${product.slug}`
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Product",
+                "@id": `${url}#producto`,
+                name: product.name,
+                description: product.description || undefined,
+                image: product.image || undefined,
+                category: product.category,
+                brand: { "@type": "Brand", name: SITE_NAME },
+                offers: {
+                    "@type": "Offer",
+                    url,
+                    priceCurrency: "MXN",
+                    price: product.price.toFixed(2),
+                    availability: product.available ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+                    itemCondition: "https://schema.org/NewCondition",
+                    seller: { "@id": `${SITE_URL}/#negocio` },
+                    eligibleRegion: { "@type": "AdministrativeArea", name: "Ciudad de México" },
+                },
+            },
+            {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                    { "@type": "ListItem", position: 1, name: "Inicio", item: SITE_URL },
+                    { "@type": "ListItem", position: 2, name: "Productos", item: `${SITE_URL}/productos` },
+                    { "@type": "ListItem", position: 3, name: product.name, item: url },
+                ],
+            },
+        ],
+    }
+
     return (
         <div className="container-custom py-10">
+            <JsonLd data={structuredData} />
             <div className="mb-6 text-sm text-[var(--muted-foreground)]">
                 <Link href="/productos" className="hover:text-[var(--primary)]">Productos</Link>
                 <span className="mx-2">/</span>

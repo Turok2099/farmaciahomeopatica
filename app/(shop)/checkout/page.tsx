@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { CheckoutForm } from "@/components/cart/checkout-form"
 
 export const metadata: Metadata = {
-    title: "Finalizar compra | Homeopáticos Schüssler",
+    title: "Finalizar compra",
     robots: { index: false, follow: false },
 }
 

@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowRightIcon, MagnifyingGlassIcon, ShoppingCartIcon, TruckIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline"
@@ -5,12 +6,47 @@ import { Button } from "@/components/ui/button"
 import { BranchMap } from "@/components/shop/branch-map"
 import { ProductCard } from "@/components/shop/product-card"
 import { getFeaturedProducts, getCategoryCards } from "@/lib/products"
+import { JsonLd } from "@/components/seo/json-ld"
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, DEFAULT_OG_IMAGE, ADDRESS, GEO, OPENING_HOURS, SOCIAL_PROFILES } from "@/lib/site"
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+}
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_URL}/#website`,
+      url: SITE_URL,
+      name: SITE_NAME,
+      inLanguage: "es-MX",
+    },
+    {
+      "@type": "Pharmacy",
+      "@id": `${SITE_URL}/#negocio`,
+      name: SITE_NAME,
+      description: SITE_DESCRIPTION,
+      url: SITE_URL,
+      image: `${SITE_URL}${DEFAULT_OG_IMAGE}`,
+      address: ADDRESS,
+      geo: GEO,
+      openingHoursSpecification: OPENING_HOURS,
+      areaServed: { "@type": "City", name: "Ciudad de México" },
+      priceRange: "$$",
+      currenciesAccepted: "MXN",
+      sameAs: SOCIAL_PROFILES,
+    },
+  ],
+}
 
 export default async function Home() {
   const [categories, featuredProducts] = await Promise.all([getCategoryCards(), getFeaturedProducts()])
 
   return (
     <div className="flex flex-col">
+      <JsonLd data={structuredData} />
       {/* Portada: en escritorio el texto va sobre el espacio libre de la imagen; en móvil, encima de ella */}
       <section className="relative bg-[var(--background)]">
         <div className="container-custom pb-6 pt-8 lg:absolute lg:inset-0 lg:z-10 lg:flex lg:items-center lg:pb-0 lg:pt-0">

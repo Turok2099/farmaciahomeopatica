@@ -8,7 +8,7 @@ import { ClearCart, Refresh } from "@/components/cart/success-helpers"
 import { Button } from "@/components/ui/button"
 
 export const metadata: Metadata = {
-    title: "Pedido recibido | Homeopáticos Schüssler",
+    title: "Pedido recibido",
     robots: { index: false, follow: false },
 }
 

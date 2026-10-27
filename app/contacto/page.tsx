@@ -5,7 +5,8 @@ import { SocialLinks } from "@/components/shop/social-links"
 import { HOURS_LINES } from "@/lib/store-hours"
 
 export const metadata: Metadata = {
-    title: "Contacto | Homeopáticos Schüssler",
+    title: "Contacto",
+    alternates: { canonical: "/contacto" },
     description: "Escríbenos a contacto@schussler.com.mx o visita nuestra sucursal en la Ciudad de México.",
 }
 

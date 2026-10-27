@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { CoverageBar } from "@/components/layout/coverage-bar";
 import { WhatsAppFloat } from "@/components/shop/whatsapp-float";
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION, DEFAULT_OG_IMAGE } from "@/lib/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,8 +18,26 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Homeopáticos Schüssler - Homeopatía y Bienestar",
-  description: "Tu tienda de confianza para productos homeopáticos y salud natural.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Homeopáticos Schüssler | Homeopatía y sales de Schüssler en CDMX",
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    locale: "es_MX",
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [{ url: DEFAULT_OG_IMAGE, width: 1944, height: 809, alt: "Productos Homeopáticos Schüssler" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
+  },
 };
 
 export default function RootLayout({

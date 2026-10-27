@@ -1,7 +1,7 @@
 import { CartView } from "@/components/cart/cart-view"
 
 export const metadata = {
-    title: "Carrito de Compras | Homeopáticos Schüssler",
+    title: "Carrito de Compras",
     robots: { index: false, follow: true },
 }
 

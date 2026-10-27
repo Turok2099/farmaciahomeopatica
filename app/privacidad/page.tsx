@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 
 export const metadata: Metadata = {
-    title: "Aviso de privacidad | Homeopáticos Schüssler",
+    title: "Aviso de privacidad",
+    alternates: { canonical: "/privacidad" },
     description: "Aviso de privacidad de Homeopáticos Schüssler.",
 }
 

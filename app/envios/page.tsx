@@ -3,7 +3,8 @@ import Link from "next/link"
 import { WhatsAppButton } from "@/components/shop/whatsapp-button"
 
 export const metadata: Metadata = {
-    title: "Envíos y entrega | Homeopáticos Schüssler",
+    title: "Envíos y entrega",
+    alternates: { canonical: "/envios" },
     description: "Entrega a domicilio en CDMX, envío gratis en compras superiores a $800 MXN o recoge en sucursal.",
 }
 
