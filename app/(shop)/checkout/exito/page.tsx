@@ -51,7 +51,7 @@ export default async function SuccessPage(props: { searchParams: Promise<{ pedid
                 </h1>
                 <p className="mt-2 text-[var(--muted-foreground)]" role="status">
                     {paid
-                        ? `Tu pedido #${order.id} está pagado. Te enviaremos el comprobante a ${order.customerEmail}.`
+                        ? `Tu pedido #${order.id} está pagado. Te enviaremos la confirmación de tu pedido a ${order.customerEmail}.`
                         : order.status === "cancelled"
                             ? "Este pedido no se completó. Puedes volver a intentarlo desde tu carrito."
                             : "Estamos esperando la confirmación del banco. Esta página se actualiza sola."}

@@ -4,6 +4,7 @@ import { ProductPurchase } from "@/components/cart/add-to-cart"
 import { DeliveryPromise } from "@/components/shop/delivery-promise"
 import { CheckIcon, TruckIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline"
 import Link from "next/link"
+import { CloudinaryImage } from "@/components/ui/cloudinary-image"
 import type { Metadata } from "next"
 import { JsonLd } from "@/components/seo/json-ld"
 import { SITE_URL, SITE_NAME } from "@/lib/site"
@@ -89,11 +90,12 @@ export default async function ProductPage(
                 {/* Product Image Placeholder */}
                 <div className="aspect-square bg-white rounded-xl overflow-hidden border border-[var(--border)] relative">
                     {product.image ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
-                        <img
+                        <CloudinaryImage
                             src={product.image}
                             alt={product.name}
-                            className="w-full h-full object-contain p-4"
+                            sizes="(min-width: 768px) 50vw, 100vw"
+                            priority
+                            className="object-contain p-4"
                         />
                     ) : (
                         <div className="flex items-center justify-center h-full text-[var(--muted-foreground)] text-4xl font-bold">

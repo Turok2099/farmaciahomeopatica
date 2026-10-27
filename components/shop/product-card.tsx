@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { CloudinaryImage } from "@/components/ui/cloudinary-image"
 import type { Product } from "@/lib/products"
 import { AddToCartButton } from "@/components/cart/add-to-cart"
 
@@ -13,12 +14,11 @@ export function ProductCard({ product }: ProductCardProps) {
         <div className="group relative flex flex-col overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card)] transition-shadow hover:shadow-md focus-within:ring-2 focus-within:ring-[var(--primary)]">
             <div className="relative aspect-square w-full overflow-hidden bg-white">
                 {product.image ? (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
+                    <CloudinaryImage
                         src={product.image}
                         alt={product.name}
-                        loading="lazy"
-                        className="h-full w-full object-contain p-4"
+                        sizes="(min-width: 1024px) 25vw, 50vw"
+                        className="object-contain p-4"
                     />
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center bg-[var(--muted)] text-2xl font-semibold text-[var(--muted-foreground)] selection:bg-transparent">

@@ -6,6 +6,7 @@ import { ArrowLeftIcon, MinusIcon, PlusIcon, TrashIcon } from "@heroicons/react/
 import { Button } from "@/components/ui/button"
 import { MAX_QUANTITY, useCart } from "@/components/cart/cart-provider"
 import { WhatsAppButton } from "@/components/shop/whatsapp-button"
+import { CloudinaryImage } from "@/components/ui/cloudinary-image"
 
 const money = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" })
 const FREE_SHIPPING_OVER = 800
@@ -46,10 +47,9 @@ export function CartView() {
             <ul className="divide-y divide-[var(--border)] rounded-lg border border-[var(--border)] lg:col-span-2">
                 {items.map((item) => (
                     <li key={item.productId} className="flex gap-4 p-4">
-                        <Link href={`/productos/${item.slug}`} className="h-20 w-20 shrink-0 overflow-hidden rounded-md border border-[var(--border)] bg-white">
+                        <Link href={`/productos/${item.slug}`} className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md border border-[var(--border)] bg-white">
                             {item.image ? (
-                                /* eslint-disable-next-line @next/next/no-img-element */
-                                <img src={item.image} alt="" className="h-full w-full object-contain p-1" />
+                                <CloudinaryImage src={item.image} alt="" sizes="80px" className="object-contain p-1" />
                             ) : (
                                 <span className="flex h-full w-full items-center justify-center bg-[var(--muted)] text-lg font-semibold text-[var(--muted-foreground)]">
                                     {item.name.substring(0, 2)}

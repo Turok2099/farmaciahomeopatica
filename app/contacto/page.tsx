@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { WhatsAppButton } from "@/components/shop/whatsapp-button"
 import { SocialLinks } from "@/components/shop/social-links"
 import { HOURS_LINES } from "@/lib/store-hours"

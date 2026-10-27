@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import Link from "next/link"
 import { WhatsAppButton } from "@/components/shop/whatsapp-button"
 
 export const metadata: Metadata = {

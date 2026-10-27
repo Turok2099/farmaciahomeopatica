@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ArrowRightIcon, MagnifyingGlassIcon, ShoppingCartIcon, TruckIcon, BuildingStorefrontIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/ui/button"
+import { CloudinaryImage } from "@/components/ui/cloudinary-image"
 import { BranchMap } from "@/components/shop/branch-map"
 import { ProductCard } from "@/components/shop/product-card"
 import { getFeaturedProducts, getCategoryCards } from "@/lib/products"
@@ -92,10 +93,9 @@ export default async function Home() {
                 href={`/productos?categoria=${encodeURIComponent(category.name)}`}
                 className="group flex items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--card)] p-2 pr-3 transition-colors hover:border-[var(--primary)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
               >
-                <span className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-md bg-white">
+                <span className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-md bg-white">
                   {category.image ? (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img src={category.image} alt="" loading="lazy" className="h-full w-full object-contain p-1" />
+                    <CloudinaryImage src={category.image} alt="" sizes="56px" className="object-contain p-1" />
                   ) : (
                     <span className="text-sm font-semibold text-[#5b6b78]">{category.name.substring(0, 2)}</span>
                   )}
