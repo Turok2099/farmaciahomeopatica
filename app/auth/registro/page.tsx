@@ -3,6 +3,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Honeypot } from "@/components/auth/honeypot"
 import { useActionState } from "react"
 import { signup } from "@/app/actions/auth"
 
@@ -21,6 +22,7 @@ export default function RegisterPage() {
                     </p>
                 </div>
                 <form className="mt-8 space-y-6" action={action}>
+                    <Honeypot />
                     <div className="rounded-md shadow-sm space-y-4">
                         <div>
                             <label htmlFor="name" className="sr-only">Nombre completo</label>

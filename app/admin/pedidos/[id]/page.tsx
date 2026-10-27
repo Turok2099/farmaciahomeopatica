@@ -6,7 +6,7 @@ import { orders, orderItems } from "@/lib/schema"
 import { requireRole } from "@/lib/auth"
 import { statusLabels } from "@/lib/orders"
 import { Button } from "@/components/ui/button"
-import { updateOrderStatus } from "@/app/admin/actions"
+import { resendOrderConfirmation, updateOrderStatus } from "@/app/admin/actions"
 import { statusStyles } from "@/app/admin/pedidos/page"
 
 const money = new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" })
@@ -32,6 +32,9 @@ export default async function AdminOrderDetail(props: { params: Promise<{ id: st
             </div>
             <p className="mb-6 text-sm text-[var(--muted-foreground)]">
                 Creado: {dateFmt.format(order.createdAt)}{order.paidAt && ` · Pagado: ${dateFmt.format(order.paidAt)}`}
+                {(order.status === "paid" || order.status === "delivered") && (
+                    <> · Confirmación por correo: {order.confirmationSentAt ? `enviada el ${dateFmt.format(order.confirmationSentAt)}` : <strong className="text-red-600">no enviada</strong>}</>
+                )}
             </p>
 
             <div className="mb-6 grid gap-4 sm:grid-cols-2">
@@ -72,6 +75,12 @@ export default async function AdminOrderDetail(props: { params: Promise<{ id: st
                         <input type="hidden" name="id" value={order.id} />
                         <input type="hidden" name="status" value="delivered" />
                         <Button>{order.fulfillment === "pickup" ? "Marcar como recogido" : "Marcar como entregado"}</Button>
+                    </form>
+                )}
+                {(order.status === "paid" || order.status === "delivered") && (
+                    <form action={resendOrderConfirmation}>
+                        <input type="hidden" name="id" value={order.id} />
+                        <Button variant="outline">{order.confirmationSentAt ? "Reenviar confirmación" : "Enviar confirmación"}</Button>
                     </form>
                 )}
                 {(order.status === "pending" || order.status === "paid") && (

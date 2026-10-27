@@ -3,7 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { CheckCircleIcon, ClockIcon } from "@heroicons/react/24/outline"
 import { getStripe } from "@/lib/stripe"
-import { getOrderByPublicId, markOrderPaid } from "@/lib/orders"
+import { getOrderByPublicId, markOrderPaid, sendConfirmationOnce } from "@/lib/orders"
 import { ClearCart, Refresh } from "@/components/cart/success-helpers"
 import { Button } from "@/components/ui/button"
 
@@ -34,6 +34,9 @@ export default async function SuccessPage(props: { searchParams: Promise<{ pedid
             console.error("No se pudo consultar la sesión de Stripe", error instanceof Error ? error.message : error)
         }
     }
+
+    // Si el correo de confirmación no salió antes (p. ej. falló Resend), se reintenta al abrir esta página.
+    if (data.order.status === "paid" && !data.order.confirmationSentAt) await sendConfirmationOnce(data.order.id)
 
     const { order, items } = data
     const paid = order.status === "paid" || order.status === "delivered"

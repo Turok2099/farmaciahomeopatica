@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray, isNull } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { orders, orderItems, type OrderStatus } from "@/lib/schema";
 import { sendOrderConfirmation } from "@/lib/order-email";
@@ -38,18 +38,41 @@ export async function markOrderPaid(sessionId: string, amountTotal: number | nul
         .where(and(eq(orders.id, order.id), eq(orders.status, "pending")))
         .returning({ id: orders.id });
 
-    // Solo quien hizo la transición pendiente → pagado envía el correo: así no se duplica
-    // aunque el webhook y la página de éxito coincidan.
-    if (updated.length > 0) {
-        try {
-            const items = await db.select().from(orderItems).where(eq(orderItems.orderId, order.id));
-            await sendOrderConfirmation(order, items);
-        } catch (error) {
-            // Un fallo del correo nunca debe revertir el pago ni hacer que Stripe reintente el webhook.
-            console.error(`Pedido ${order.id}: no se pudo enviar la confirmación`, error instanceof Error ? error.message : error);
-        }
-    }
+    if (updated.length > 0) await sendConfirmationOnce(order.id);
     return { ok: true as const, order };
+}
+
+// Envía la confirmación una sola vez. Se "reclama" el envío con un UPDATE atómico antes de mandar el
+// correo: si el webhook y la página de éxito coinciden, solo uno lo envía. Si Resend falla se libera
+// el reclamo, y el siguiente intento (por ejemplo, al recargar la página de éxito) lo reintenta.
+export async function sendConfirmationOnce(orderId: number) {
+    const [claimed] = await db
+        .update(orders)
+        .set({ confirmationSentAt: new Date() })
+        .where(and(eq(orders.id, orderId), isNull(orders.confirmationSentAt), inArray(orders.status, ["paid", "delivered"])))
+        .returning();
+    if (!claimed) return false;
+
+    try {
+        const items = await db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
+        await sendOrderConfirmation(claimed, items);
+        return true;
+    } catch (error) {
+        // Un fallo del correo nunca debe revertir el pago ni hacer que Stripe reintente el webhook.
+        console.error(`Pedido ${orderId}: no se pudo enviar la confirmación`, error instanceof Error ? error.message : error);
+        await db.update(orders).set({ confirmationSentAt: null }).where(eq(orders.id, orderId));
+        return false;
+    }
+}
+
+// Reenvío manual desde el panel: ignora si ya se había enviado.
+export async function resendConfirmation(orderId: number) {
+    const [order] = await db.select().from(orders).where(eq(orders.id, orderId));
+    if (!order || (order.status !== "paid" && order.status !== "delivered")) return false;
+    const items = await db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
+    await sendOrderConfirmation(order, items);
+    await db.update(orders).set({ confirmationSentAt: new Date() }).where(eq(orders.id, orderId));
+    return true;
 }
 
 export async function cancelPendingOrder(sessionId: string) {

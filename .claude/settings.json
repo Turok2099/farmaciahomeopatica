@@ -5,7 +5,10 @@
       "Bash(cd \"c:/Programacion Local/Nuevos_Sitios/medicamentosHomeopaticos\" && printf '\\\\n# notas internas\\\\nPENDIENTES.md\\\\n' >> .gitignore && git status --short)",
       "Bash(cd \"c:/Programacion Local/Nuevos_Sitios/medicamentosHomeopaticos\" && sed -i 's/^- \\\\[ \\\\] Probar un pago real de punta a punta\\\\\\(.*\\\\\\)$/- [x] Probar un pago de punta a punta en modo test\\\\1 \\(Pedido #5 pagado en producción, 2026-10-23. Falta repetir en modo Live.\\)/' PENDIENTES.md && sed -n 22,27p PENDIENTES.md | cut -c1-120)",
       "Bash(cd \"c:/Programacion Local/Nuevos_Sitios/medicamentosHomeopaticos\" && sed -i \"s|\\\\.\\\\*\\\\\\\\\\\\\\\\\\\\.\\(?:png|.*\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\.\\(?:png|\" proxy.ts; grep -n matcher proxy.ts)",
-      "PowerShell(Get-NetTCPConnection -LocalPort 3056,3055 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }; Set-Location \"c:\\\\Programacion Local\\\\Nuevos_Sitios\\\\medicamentosHomeopaticos\"; git status --short)"
+      "PowerShell(Get-NetTCPConnection -LocalPort 3056,3055 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }; Set-Location \"c:\\\\Programacion Local\\\\Nuevos_Sitios\\\\medicamentosHomeopaticos\"; git status --short)",
+      "Bash(sed -i 's|<Link href=\"#\" className=\"font-medium|<Link href=\"/auth/olvide\" className=\"font-medium|' app/auth/login/page.tsx)",
+      "Bash(sed -i 's|^\\\\\\(\\\\s*\\\\\\)<form className=\"mt-8 space-y-6\" action={action}>|&\\\\n\\\\1    <Honeypot />|' app/auth/login/page.tsx app/auth/registro/page.tsx)",
+      "Bash(sed -i 's|^import { Button } from \"@/components/ui/button\"|&\\\\nimport { Honeypot } from \"@/components/auth/honeypot\"|' app/auth/login/page.tsx app/auth/registro/page.tsx)"
     ],
     "additionalDirectories": [
       "c:\\Programacion Local\\Nuevos_Sitios\\medicamentosHomeopaticos"

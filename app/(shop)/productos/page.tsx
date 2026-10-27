@@ -1,26 +1,36 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { getProducts, getStoreCategories } from "@/lib/products"
+import { notFound } from "next/navigation"
+import { getStoreCategories, searchProducts, type ProductSort } from "@/lib/products"
 import { ProductCard } from "@/components/shop/product-card"
 import { cn } from "@/lib/utils"
 
-export async function generateMetadata(props: {
-    searchParams: Promise<{ categoria?: string; q?: string; orden?: string }>
-}): Promise<Metadata> {
-    const { categoria, q, orden } = await props.searchParams
+type SearchParams = Promise<{ categoria?: string; q?: string; orden?: string; pagina?: string }>
+
+const parsePage = (value?: string) => {
+    const n = Number(value)
+    return Number.isInteger(n) && n >= 1 ? n : 1
+}
+
+export async function generateMetadata(props: { searchParams: SearchParams }): Promise<Metadata> {
+    const { categoria, q, orden, pagina } = await props.searchParams
     const categories = await getStoreCategories().catch(() => [] as string[])
     const activeCategory = categories.find((c) => c === categoria)
+    const page = parsePage(pagina)
     const title = activeCategory ? `${activeCategory}: productos homeopáticos` : "Productos homeopáticos y sales de Schüssler"
 
+    const canonical = new URLSearchParams()
+    if (activeCategory) canonical.set("categoria", activeCategory)
+    if (page > 1) canonical.set("pagina", String(page))
+    const qs = canonical.toString()
+
     return {
-        title,
+        title: page > 1 ? `${title} (página ${page})` : title,
         description: activeCategory
             ? `Compra ${activeCategory.toLowerCase()} de Homeopáticos Schüssler. Entrega a domicilio en CDMX o recoge en sucursal en la Condesa.`
             : "Catálogo de productos homeopáticos y sales de Schüssler. Entrega a domicilio en CDMX o recoge en sucursal en la Condesa.",
-        // Las búsquedas y el orden duplican contenido: no se indexan. La categoría conserva su propia URL canónica.
-        alternates: {
-            canonical: activeCategory ? `/productos?categoria=${encodeURIComponent(activeCategory)}` : "/productos",
-        },
+        // Las búsquedas y el orden duplican contenido: no se indexan. La categoría y cada página conservan su URL canónica.
+        alternates: { canonical: qs ? `/productos?${qs}` : "/productos" },
         robots: q?.trim() || orden ? { index: false, follow: true } : undefined,
     }
 }
@@ -31,36 +41,25 @@ const sortOptions = [
     { value: "precio-desc", label: "Precio: mayor a menor" },
 ]
 
-const normalize = (value: string) =>
-    value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
-
-export default async function ProductsPage(props: {
-    searchParams: Promise<{ categoria?: string; q?: string; orden?: string }>
-}) {
-    const { categoria, q, orden } = await props.searchParams
-    const [products, categories] = await Promise.all([getProducts(), getStoreCategories()])
+export default async function ProductsPage(props: { searchParams: SearchParams }) {
+    const { categoria, q, orden, pagina } = await props.searchParams
+    const categories = await getStoreCategories()
     const activeCategory = categories.find((c) => c === categoria)
     const query = q?.trim() ?? ""
+    const page = parsePage(pagina)
 
-    const activeSort = sortOptions.find((o) => o.value === orden)?.value ?? "nombre"
+    const activeSort = (sortOptions.find((o) => o.value === orden)?.value ?? "nombre") as ProductSort
 
-    const filtered = products.filter(
-        (p) =>
-            (!activeCategory || p.category === activeCategory) &&
-            (!query || normalize(p.name).includes(normalize(query)))
-    )
+    const { products: filtered, total, totalPages } = await searchProducts({ category: activeCategory, query, sort: activeSort, page })
+    if (page > totalPages) notFound()
 
-    filtered.sort((a, b) =>
-        activeSort === "precio-asc" ? a.price - b.price
-        : activeSort === "precio-desc" ? b.price - a.price
-        : a.name.localeCompare(b.name, "es")
-    )
-
-    const hrefFor = (category?: string, sort: string = activeSort) => {
+    // Al cambiar de categor\u00eda u orden se vuelve a la primera p\u00e1gina.
+    const hrefFor = (category?: string, sort: string = activeSort, pageNumber = 1) => {
         const params = new URLSearchParams()
         if (category) params.set("categoria", category)
         if (query) params.set("q", query)
         if (sort !== "nombre") params.set("orden", sort)
+        if (pageNumber > 1) params.set("pagina", String(pageNumber))
         const qs = params.toString()
         return qs ? `/productos?${qs}` : "/productos"
     }
@@ -98,7 +97,7 @@ export default async function ProductsPage(props: {
 
             <div className="mb-6 flex flex-wrap items-center justify-between gap-3 text-sm">
                 <p className="text-[var(--muted-foreground)]">
-                    {filtered.length} {filtered.length === 1 ? "producto" : "productos"}
+                    {total} {total === 1 ? "producto" : "productos"}
                     {activeCategory && <> en <strong className="text-[var(--foreground)]">{activeCategory}</strong></>}
                     {(activeCategory || query) && (
                         <> · <Link href="/productos" className="text-[var(--primary)] hover:underline">Quitar filtros</Link></>
@@ -120,11 +119,38 @@ export default async function ProductsPage(props: {
             </div>
 
             {filtered.length > 0 ? (
+                <>
                 <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
                     {filtered.map((product) => (
                         <ProductCard key={product.id} product={product} />
                     ))}
                 </div>
+                {totalPages > 1 && (
+                    <nav aria-label="Paginación" className="mt-10 flex flex-wrap items-center justify-center gap-2">
+                        {page > 1 && (
+                            <Link href={hrefFor(activeCategory, activeSort, page - 1)} rel="prev" className={linkClass(false)}>
+                                Anterior
+                            </Link>
+                        )}
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                            <Link
+                                key={n}
+                                href={hrefFor(activeCategory, activeSort, n)}
+                                className={cn(linkClass(n === page), "min-w-10 justify-center")}
+                                aria-label={`Página ${n}`}
+                                aria-current={n === page ? "page" : undefined}
+                            >
+                                {n}
+                            </Link>
+                        ))}
+                        {page < totalPages && (
+                            <Link href={hrefFor(activeCategory, activeSort, page + 1)} rel="next" className={linkClass(false)}>
+                                Siguiente
+                            </Link>
+                        )}
+                    </nav>
+                )}
+                </>
             ) : (
                 <div className="rounded-lg border border-dashed border-[var(--border)] py-16 text-center">
                     <p className="mb-4 text-[var(--muted-foreground)]">No encontramos productos con esos criterios.</p>

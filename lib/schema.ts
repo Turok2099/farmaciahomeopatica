@@ -69,6 +69,8 @@ export const orders = pgTable('orders', {
     stripePaymentIntentId: text('stripe_payment_intent_id'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     paidAt: timestamp('paid_at'),
+    // Se marca al enviar el correo de confirmación; null = pendiente de enviar (o de reintentar).
+    confirmationSentAt: timestamp('confirmation_sent_at'),
 });
 
 export const orderItems = pgTable('order_items', {
@@ -79,4 +81,20 @@ export const orderItems = pgTable('order_items', {
     name: text('name').notNull(),
     unitPriceCents: integer('unit_price_cents').notNull(),
     quantity: integer('quantity').notNull(),
+});
+
+// Solo se guarda el hash (SHA-256) del token: si se filtra la base, los enlaces no sirven.
+export const passwordResetTokens = pgTable('password_reset_tokens', {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    tokenHash: text('token_hash').notNull().unique(),
+    expiresAt: timestamp('expires_at').notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// Contadores para limitar intentos (login, registro, recuperación). Ver lib/rate-limit.ts.
+export const rateLimits = pgTable('rate_limits', {
+    key: text('key').primaryKey(),
+    count: integer('count').notNull(),
+    resetAt: timestamp('reset_at').notNull(),
 });

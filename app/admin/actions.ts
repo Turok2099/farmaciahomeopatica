@@ -9,6 +9,7 @@ import { db } from '@/lib/db'
 import { categories, orders, products, users } from '@/lib/schema'
 import { requireRole } from '@/lib/auth'
 import { signUpload } from '@/lib/cloudinary'
+import { resendConfirmation } from '@/lib/orders'
 
 export type AdminState = { ok?: boolean; message?: string; errors?: Record<string, string[]> } | undefined
 
@@ -192,5 +193,17 @@ export async function updateOrderStatus(formData: FormData) {
 
     await db.update(orders).set({ status: status as 'delivered' | 'cancelled' }).where(eq(orders.id, id))
     revalidatePath('/admin/pedidos')
+    revalidatePath(`/admin/pedidos/${id}`)
+}
+
+export async function resendOrderConfirmation(formData: FormData) {
+    await requireRole('admin')
+    const id = Number(formData.get('id'))
+    if (!Number.isInteger(id)) return
+    try {
+        await resendConfirmation(id)
+    } catch (error) {
+        console.error(`Pedido ${id}: no se pudo reenviar la confirmación`, error instanceof Error ? error.message : error)
+    }
     revalidatePath(`/admin/pedidos/${id}`)
 }

@@ -3,6 +3,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
+import { Honeypot } from "@/components/auth/honeypot"
 import { useActionState } from "react"
 import { login } from "@/app/actions/auth"
 
@@ -21,6 +22,7 @@ export default function LoginPage() {
                     </p>
                 </div>
                 <form className="mt-8 space-y-6" action={action}>
+                    <Honeypot />
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div className="mb-4">
                             <label htmlFor="email-address" className="sr-only">Correo electrónico</label>
@@ -68,7 +70,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="text-sm">
-                            <Link href="#" className="font-medium text-[var(--primary)] hover:text-[var(--primary)]/80">
+                            <Link href="/auth/olvide" className="font-medium text-[var(--primary)] hover:text-[var(--primary)]/80">
                                 ¿Olvidaste tu contraseña?
                             </Link>
                         </div>
