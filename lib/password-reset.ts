@@ -3,12 +3,12 @@ import { and, eq, gt } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { passwordResetTokens, users } from "@/lib/schema";
 import { sendEmail } from "@/lib/email";
+import { CONTACT_EMAIL, emailButton, emailLayout, emailStyles as s, esc } from "@/lib/email-layout";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 const TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hora
 
 const hashToken = (token: string) => createHash("sha256").update(token).digest("hex");
-const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 // Un solo enlace vigente por usuario: al pedir uno nuevo se invalidan los anteriores.
 async function createResetToken(userId: number) {
@@ -42,20 +42,26 @@ export async function findUserByEmail(email: string) {
     return user ?? null;
 }
 
+export function renderPasswordReset(user: { name: string }, url: string) {
+    const body = `
+<h1 style="${s.h1}">Restablece tu contraseña</h1>
+<p style="${s.p}">Hola, ${esc(user.name)}. Recibimos una solicitud para cambiar la contraseña de tu cuenta. Pulsa el botón para crear una nueva.</p>
+${emailButton(url, "Crear nueva contraseña")}
+<p style="${s.small}">Si el botón no funciona, copia y pega este enlace en tu navegador:<br><a href="${url}" style="color:${s.colors.brand};word-break:break-all">${url}</a></p>
+<div style="${s.box}">
+  <p style="margin:0;font-size:14px;line-height:1.5;color:${s.colors.text}">El enlace vence en <strong>1 hora</strong> y solo se puede usar una vez. Si tú no lo pediste, ignora este correo: tu contraseña no cambiará.</p>
+</div>`;
+
+    return {
+        subject: `Restablece tu contraseña | ${SITE_NAME}`,
+        html: emailLayout({ preheader: "Crea una nueva contraseña para tu cuenta. El enlace vence en 1 hora.", body }),
+        text: `Hola, ${user.name}. Para crear una nueva contraseña abre este enlace (vence en 1 hora y solo sirve una vez): ${url}\nSi no lo pediste, ignora este correo.`,
+    };
+}
+
 export async function sendPasswordResetEmail(user: { id: number; name: string; email: string }) {
     const token = await createResetToken(user.id);
     const url = `${SITE_URL}/auth/restablecer?token=${token}`;
 
-    await sendEmail({
-        to: user.email,
-        subject: `Restablece tu contraseña | ${SITE_NAME}`,
-        replyTo: "contacto@schussler.com.mx",
-        html: `<div style="font-family:system-ui,Arial,sans-serif;max-width:560px;margin:0 auto;color:#172b3a">
-<h1 style="font-size:22px">Restablece tu contraseña</h1>
-<p>Hola, ${esc(user.name)}. Recibimos una solicitud para cambiar la contraseña de tu cuenta.</p>
-<p><a href="${url}" style="display:inline-block;background:#014c80;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none">Crear nueva contraseña</a></p>
-<p style="color:#5b6b78;font-size:14px">El enlace vence en 1 hora y solo se puede usar una vez. Si tú no lo pediste, ignora este correo: tu contraseña no cambiará.</p>
-</div>`,
-        text: `Hola, ${user.name}. Para crear una nueva contraseña abre este enlace (vence en 1 hora): ${url}\nSi no lo pediste, ignora este correo.`,
-    });
+    await sendEmail({ to: user.email, replyTo: CONTACT_EMAIL, ...renderPasswordReset(user, url) });
 }

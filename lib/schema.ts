@@ -51,6 +51,8 @@ export const orders = pgTable('orders', {
     id: serial('id').primaryKey(),
     // Token no adivinable: sirve para que el cliente (incluso sin cuenta) vea su pedido.
     publicId: text('public_id').notNull().unique(),
+    // Código que ve el cliente (p. ej. SCH-7K4M9Q). No es consecutivo; el id serial queda como llave interna.
+    orderNumber: text('order_number').notNull().unique(),
     userId: integer('user_id').references(() => users.id, { onDelete: 'set null' }),
     // pending: esperando pago · paid: pagado, por entregar · delivered: entregado/recogido · cancelled
     status: text('status').$type<OrderStatus>().notNull().default('pending'),

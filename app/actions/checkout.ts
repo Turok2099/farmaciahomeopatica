@@ -10,6 +10,7 @@ import { getProductsByIds } from '@/lib/products'
 import { getStripe, siteUrl } from '@/lib/stripe'
 import { getSession } from '@/lib/session'
 import { FREE_SHIPPING_OVER_CENTS, isCdmxPostalCode } from '@/lib/orders'
+import { generateOrderNumber, isUniqueViolation } from "@/lib/order-number"
 
 export type CheckoutState = { message?: string; errors?: Record<string, string[]> } | undefined
 
@@ -83,21 +84,32 @@ export async function createCheckout(prev: CheckoutState, formData: FormData): P
     const publicId = randomBytes(16).toString('hex')
     const isDelivery = data.fulfillment === 'delivery'
 
-    const [order] = await db.insert(orders).values({
-        publicId,
-        userId,
-        fulfillment: data.fulfillment,
-        customerName: data.name,
-        customerEmail: data.email,
-        customerPhone: data.phone,
-        addressStreet: isDelivery ? data.street : '',
-        addressNeighborhood: isDelivery ? data.neighborhood : '',
-        addressPostalCode: isDelivery ? data.postalCode : '',
-        addressNotes: isDelivery ? data.notes : '',
-        subtotalCents,
-        shippingCents: 0,
-        totalCents: subtotalCents,
-    }).returning({ id: orders.id })
+    // El código de pedido es aleatorio; si chocara con otro (muy improbable) la base lo rechaza y se genera uno nuevo.
+    let order: { id: number; orderNumber: string } | undefined
+    for (let attempt = 0; attempt < 5 && !order; attempt++) {
+        try {
+            const [created] = await db.insert(orders).values({
+                orderNumber: generateOrderNumber(),
+                publicId,
+                userId,
+                fulfillment: data.fulfillment,
+                customerName: data.name,
+                customerEmail: data.email,
+                customerPhone: data.phone,
+                addressStreet: isDelivery ? data.street : '',
+                addressNeighborhood: isDelivery ? data.neighborhood : '',
+                addressPostalCode: isDelivery ? data.postalCode : '',
+                addressNotes: isDelivery ? data.notes : '',
+                subtotalCents,
+                shippingCents: 0,
+                totalCents: subtotalCents,
+            }).returning({ id: orders.id, orderNumber: orders.orderNumber })
+            order = created
+        } catch (error) {
+            if (!isUniqueViolation(error)) throw error
+        }
+    }
+    if (!order) return { message: 'No pudimos registrar tu pedido. Inténtalo de nuevo.' }
 
     await db.insert(orderItems).values(lines.map((l) => ({
         orderId: order.id, productId: l.productId, name: l.name, unitPriceCents: l.unitPriceCents, quantity: l.quantity,
@@ -111,8 +123,8 @@ export async function createCheckout(prev: CheckoutState, formData: FormData): P
             locale: 'es',
             customer_email: data.email,
             client_reference_id: publicId,
-            metadata: { orderId: String(order.id), publicId },
-            payment_intent_data: { description: `Pedido #${order.id} · Homeopáticos Schüssler`, metadata: { orderId: String(order.id) } },
+            metadata: { orderId: String(order.id), orderNumber: order.orderNumber, publicId },
+            payment_intent_data: { description: `Pedido ${order.orderNumber} · Homeopáticos Schüssler`, metadata: { orderId: String(order.id), orderNumber: order.orderNumber } },
             line_items: lines.map((l) => ({
                 quantity: l.quantity,
                 price_data: {

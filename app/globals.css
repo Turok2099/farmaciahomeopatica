@@ -6,6 +6,7 @@
 }
 
 :root {
+  color-scheme: light;
   --background: #ffffff;
   --foreground: #172b3a;
 
@@ -37,6 +38,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    /* Los controles nativos (listas desplegables, scrollbars, fechas) se dibujan en oscuro */
+    color-scheme: dark;
     --background: #0b1620;
     --foreground: #e8eef3;
 
@@ -59,6 +62,12 @@
 
     --silver: #8a8c90;
   }
+}
+
+/* Lista desplegable de los select: sigue los colores del tema en lugar de los del navegador */
+select option {
+  background-color: var(--card);
+  color: var(--foreground);
 }
 
 body {

@@ -55,7 +55,7 @@ export default async function AdminOrders(props: { searchParams: Promise<{ estad
                     <tbody>
                         {rows.map((o) => (
                             <tr key={o.id} className="border-t border-[var(--border)]">
-                                <td className="px-4 py-3"><Link href={`/admin/pedidos/${o.id}`} className="font-medium text-[var(--primary)] hover:underline">#{o.id}</Link></td>
+                                <td className="px-4 py-3"><Link href={`/admin/pedidos/${o.id}`} className="font-medium text-[var(--primary)] hover:underline">{o.orderNumber}</Link></td>
                                 <td className="px-4 py-3 text-[var(--muted-foreground)]">{dateFmt.format(o.createdAt)}</td>
                                 <td className="px-4 py-3">{o.customerName}</td>
                                 <td className="px-4 py-3">{o.fulfillment === "pickup" ? "Recoger" : `Domicilio · CP ${o.addressPostalCode}`}</td>

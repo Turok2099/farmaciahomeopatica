@@ -27,7 +27,7 @@ export default async function AdminOrderDetail(props: { params: Promise<{ id: st
         <div className="max-w-3xl">
             <Link href="/admin/pedidos" className="text-sm text-[var(--primary)] hover:underline">← Pedidos</Link>
             <div className="mb-6 mt-2 flex flex-wrap items-center gap-3">
-                <h1 className="text-2xl font-semibold">Pedido #{order.id}</h1>
+                <h1 className="text-2xl font-semibold">Pedido {order.orderNumber}</h1>
                 <span className={`rounded px-2 py-0.5 text-xs font-medium ${statusStyles[order.status]}`}>{statusLabels[order.status]}</span>
             </div>
             <p className="mb-6 text-sm text-[var(--muted-foreground)]">

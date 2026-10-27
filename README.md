@@ -75,6 +75,8 @@ El panel está en `/admin` y se protege en `proxy.ts` y en cada página con `req
 
 ## Pedidos y Stripe
 
+El cliente ve un código de pedido aleatorio (`SCH-7K4M9Q`, columna `orders.order_number`, generado en `lib/order-number.ts`); el `id` serial es solo la llave interna y la que usa el panel admin en sus URLs.
+
 1. El checkout crea el pedido como `pending` y redirige a Stripe Checkout. Los precios se leen siempre de la base, nunca del navegador.
 2. Stripe llama a `POST /api/stripe/webhook` (firma verificada). Al pagarse, el pedido pasa a `paid`.
 3. Al pasar a `paid` se envía el correo de confirmación con Resend. Se envía una sola vez; si falla, se reintenta al abrir `/checkout/exito`, y el administrador puede reenviarlo desde el detalle del pedido.

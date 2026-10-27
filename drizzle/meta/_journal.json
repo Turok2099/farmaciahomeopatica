@@ -29,6 +29,13 @@
       "when": 1793066773551,
       "tag": "0003_seguridad_y_confirmacion",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793067896694,
+      "tag": "0004_codigo_de_pedido",
+      "breakpoints": true
     }
   ]
 }
