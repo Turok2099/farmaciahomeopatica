@@ -5,15 +5,16 @@ const isDev = process.env.NODE_ENV !== "production";
 // Política de contenido. Next inyecta scripts y estilos en línea para hidratar, por eso 'unsafe-inline'
 // (con nonces habría que renderizar todo de forma dinámica). En desarrollo, React necesita 'unsafe-eval'.
 // Orígenes permitidos: imágenes y subida directa a Cloudinary, mapa embebido de Google, y Stripe Checkout
-// como destino del formulario de pago (la compra redirige a su página alojada).
+// como destino del formulario de pago (la compra redirige a su página alojada), y Google Tag Manager con
+// Google Analytics (script, envío de eventos, píxel y el iframe noscript).
 const csp = [
     "default-src 'self'",
-    `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
+    `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com${isDev ? " 'unsafe-eval'" : ""}`,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob: https://res.cloudinary.com",
+    "img-src 'self' data: blob: https://res.cloudinary.com https://*.google-analytics.com https://*.googletagmanager.com",
     "font-src 'self' data:",
-    `connect-src 'self' https://api.cloudinary.com${isDev ? " ws: wss:" : ""}`,
-    "frame-src https://www.google.com",
+    `connect-src 'self' https://api.cloudinary.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com${isDev ? " ws: wss:" : ""}`,
+    "frame-src https://www.google.com https://www.googletagmanager.com",
     "form-action 'self' https://checkout.stripe.com",
     "frame-ancestors 'none'",
     "base-uri 'self'",
