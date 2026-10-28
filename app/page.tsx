@@ -77,6 +77,7 @@ export default async function Home() {
           width={1944}
           height={809}
           priority
+          fetchPriority="high"
           sizes="100vw"
           className="h-auto w-full"
         />

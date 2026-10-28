@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { ShoppingCartIcon } from "@heroicons/react/24/outline"
-import { Button } from "@/components/ui/button"
 import { useCart } from "@/components/cart/cart-provider"
 
 export function CartLink() {
@@ -10,15 +9,17 @@ export function CartLink() {
     const shown = hydrated ? count : 0
 
     return (
-        <Link href="/carrito" aria-label={shown > 0 ? `Carrito, ${shown} artículos` : "Carrito"}>
-            <Button variant="ghost" size="icon" className="relative hover:bg-white/15 hover:text-white" tabIndex={-1}>
-                <ShoppingCartIcon className="h-5 w-5" />
-                {shown > 0 && (
-                    <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1 text-xs font-semibold text-[var(--brand)]">
-                        {shown > 99 ? "99+" : shown}
-                    </span>
-                )}
-            </Button>
+        <Link
+            href="/carrito"
+            aria-label={shown > 0 ? `Carrito, ${shown} artículos` : "Carrito"}
+            className="relative inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-white"
+        >
+            <ShoppingCartIcon className="h-5 w-5" aria-hidden />
+            {shown > 0 && (
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1 text-xs font-semibold text-[var(--brand)]">
+                    {shown > 99 ? "99+" : shown}
+                </span>
+            )}
         </Link>
     )
 }

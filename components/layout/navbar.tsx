@@ -1,7 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
 import { UserIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline"
-import { Button } from "@/components/ui/button"
 import { MobileMenu } from "@/components/layout/mobile-menu"
 import { CartLink } from "@/components/cart/cart-link"
 
@@ -48,11 +47,12 @@ export function Navbar() {
                         </button>
                     </form>
 
-                    <Link href="/auth/login" className="rounded-md focus-visible:outline-2 focus-visible:outline-white">
-                        <Button variant="ghost" size="icon" className="hover:bg-white/15 hover:text-white">
-                            <UserIcon className="h-5 w-5" />
-                            <span className="sr-only">Cuenta</span>
-                        </Button>
+                    <Link
+                        href="/auth/login"
+                        aria-label="Cuenta"
+                        className="inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-white"
+                    >
+                        <UserIcon className="h-5 w-5" aria-hidden />
                     </Link>
 
                     <CartLink />
