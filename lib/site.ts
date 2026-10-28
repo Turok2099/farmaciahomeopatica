@@ -8,9 +8,6 @@ export const DEFAULT_OG_IMAGE = "/images/portada-homeopaticos-schussler.png"
 // URL pública del sitio. Sin barra final.
 export const SITE_URL = (process.env.SITE_URL ?? "http://localhost:3000").replace(/\/$/, "")
 
-// Contenedor de Google Tag Manager.
-export const GTM_ID = "GTM-NT6HNPS8"
-
 // ID de medición de Google Analytics 4.
 export const GA_ID = "G-Q1QW3E56E4"
 

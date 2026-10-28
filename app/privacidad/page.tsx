@@ -15,7 +15,7 @@ export default function Page() {
     return (
         <div className="container-custom max-w-3xl py-10">
             <h1 className="text-3xl font-bold mb-2">Aviso de privacidad</h1>
-            <p className="mb-6 text-sm text-[var(--muted-foreground)]">Última actualización: 26 de octubre de 2026</p>
+            <p className="mb-6 text-sm text-[var(--muted-foreground)]">Última actualización: 27 de octubre de 2026</p>
             <div className="space-y-4 text-[var(--muted-foreground)]">
                 <h2 className={h2}>1. Responsable de tus datos</h2>
                 <p>
@@ -51,6 +51,7 @@ export default function Page() {
                     <li><strong>Stripe:</strong> procesamiento del pago.</li>
                     <li><strong>Resend:</strong> envío de correos de confirmación y de recuperación de contraseña.</li>
                     <li><strong>Neon y Vercel:</strong> almacenamiento de la base de datos y alojamiento del sitio.</li>
+                    <li><strong>Google Analytics:</strong> medición estadística del uso del sitio, solo si aceptas las cookies de analítica.</li>
                 </ul>
                 <p>
                     Algunos de estos proveedores operan servidores fuera de México, por lo que tus datos pueden transferirse a otros países.
@@ -68,10 +69,10 @@ export default function Page() {
                     Algunos datos de pedidos pueden conservarse el tiempo que la ley fiscal y contable lo exija, aun si solicitas su cancelación.
                 </p>
 
-                <h2 className={h2}>6. Cookies y almacenamiento local</h2>
+                <h2 id="cookies" className={h2}>6. Cookies y almacenamiento local</h2>
                 <p>
                     Usamos una cookie de sesión, necesaria para mantener tu cuenta iniciada, y el almacenamiento local de tu navegador para recordar el contenido de tu carrito.
-                    No usamos cookies de publicidad ni de seguimiento. Si en el futuro incorporamos herramientas de analítica, te lo informaremos y actualizaremos este aviso.
+                    No usamos cookies de publicidad. Si lo aceptas en el aviso de cookies, usamos además Google Analytics, que instala cookies para medir de forma estadística cómo se usa el sitio (páginas visitadas, tiempo de visita y origen aproximado); Google puede procesar esa información en servidores fuera de México. Si rechazas, no se carga. Puedes cambiar tu decisión en cualquier momento desde «Preferencias de cookies», al pie de la página.
                 </p>
 
                 <h2 className={h2}>7. Cambios a este aviso</h2>
